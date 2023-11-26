@@ -7,3 +7,6 @@ A fun little physics-based video game, made as a project for the course Physical
 - Cutting edge physics simulations
 - Extreme performance
 - Exiting and action-packed gameplay
+
+## Info
+Unity version `LTS 2022.3.14f1`
