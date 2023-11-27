@@ -156,7 +156,7 @@ public class PhysicsManager : MonoBehaviour
 		Vector2 surfaceVel = Vector2.Perpendicular(radius);
 		surfaceVel *= flipper.currentAngularVelocity;
 		float v = Vector2.Dot(ball.vel , dir);
-		float vnew = Vector2.Dot(surfaceVel,dir);
+		float vnew = Vector2.Dot(surfaceVel,dir)* ball.restitution* flipper.restitution;
 
 		ball.vel = ball.vel + dir*( vnew - v);
 	}
