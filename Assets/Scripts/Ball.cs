@@ -9,6 +9,7 @@ public class Ball : MonoBehaviour
     // the same as transform.position (unity's builtin position)
     public Vector2 pos { get { return transform.position; } set { transform.position = value; } }
     public Vector2 vel;
+    public bool useGravity = true;
 
     void Start()
     {
@@ -28,7 +29,9 @@ public class Ball : MonoBehaviour
     // https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/04-pinball.html
     public void Simulate()
     {
-        vel += (Vector2)Physics.gravity * Time.deltaTime;
+        if(useGravity){
+            vel += (Vector2)Physics.gravity * Time.deltaTime;
+        }
         pos += vel * Time.deltaTime;
     }
 }
