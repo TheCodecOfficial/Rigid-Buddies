@@ -5,6 +5,7 @@ public class PhysicsManager : MonoBehaviour
     public Ball[] balls;
     public Border border;
     public Flipper[] flippers;
+    public Obstacle[] obstacles;
 
     void Start()
     {
@@ -13,6 +14,7 @@ public class PhysicsManager : MonoBehaviour
         balls = FindObjectsOfType<Ball>();
         border = FindObjectOfType<Border>();
         flippers = FindObjectsOfType<Flipper>();
+        obstacles = FindObjectsOfType<Obstacle>();
     }
 
     void Update()
@@ -34,6 +36,9 @@ public class PhysicsManager : MonoBehaviour
             {
 				handleBallFlipperCollision(balls[i], flippers[j]);
             }
+            for (var j = 0; j < obstacles.Length; j++)
+				handleBallObstacleCollision(balls[i], obstacles[j]);
+                
             HandleBallBorderCollision(balls[i], border);
         }
     }
@@ -156,9 +161,27 @@ public class PhysicsManager : MonoBehaviour
 		Vector2 surfaceVel = Vector2.Perpendicular(radius);
 		surfaceVel *= flipper.currentAngularVelocity;
 		float v = Vector2.Dot(ball.vel , dir);
-		float vnew = Vector2.Dot(surfaceVel,dir)* ball.restitution* flipper.restitution;
+		float vnew = Vector2.Dot(surfaceVel,dir)* ball.restitution* flipper.pushVel;
 
 		ball.vel = ball.vel + dir*( vnew - v);
+	}
+
+    void handleBallObstacleCollision(Ball ball, Obstacle obstacle) 
+	{
+		Vector2 dir = ball.pos - obstacle.pos;
+		float d = dir.magnitude;
+		if (d == 0.0 || d > ball.radius + obstacle.radius)
+			return;
+
+		dir = dir *1f / d;
+
+		float corr = ball.radius + obstacle.radius - d;
+		ball.pos += dir* corr;
+
+		var v = Vector2.Dot(ball.vel , dir);
+		ball.vel += dir * (obstacle.pushVel - v);
+
+        //TODO add score
 	}
 
 }

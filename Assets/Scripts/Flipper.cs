@@ -16,7 +16,7 @@ public class Flipper : MonoBehaviour
     public Vector2 pos { get { return transform.position; } set { transform.position = value; } }
     public float currentAngularVelocity = 0f;
     public bool isPressed = false;
-    public float restitution = 1;
+    public float pushVel = 1;
 
     // Start is called before the first frame update
     void Start()

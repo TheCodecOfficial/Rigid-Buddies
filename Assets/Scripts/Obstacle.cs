@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public float radius;
+    public Vector2 pos { get { return transform.position; } set { transform.position = value; } }
+    public float pushVel;
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        // Get the SpriteRenderer component (or add it if it doesn't exist)
+        if (!TryGetComponent(out SpriteRenderer spriteRenderer))
+        {
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        }
+        // Set its sprite to the circle sprite and scale accordingly
+        spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Circle");
+        transform.localScale = Vector3.one * radius * 2;
         
     }
 }
