@@ -6,55 +6,48 @@ using UnityEngine;
 
 public class Flipper : MonoBehaviour
 {
-    public float radius;
-    public float length;
     float restAngle; //in degrees
     public float maxRotation; //in degrees
-    public float angularVelocity; //in degrees per second
-    
-    public float rotation { get { return transform.localRotation.eulerAngles.z; } set { transform.localRotation = Quaternion.Euler(new Vector3(0,0,value)); } }
-    public Vector2 pos { get { return transform.position; } set { transform.position = value; } }
-    public float currentAngularVelocity = 0f;
     public bool isPressed = false;
-    public float restitution = 1;
+
+
+    public MyRigidbody myRigidbody;
+    public MyCapsuleCollider myCapsuleCollider;
+
 
     // Start is called before the first frame update
     void Start()
     {
+
+        myCapsuleCollider = this.GetComponent<MyCapsuleCollider>();
+        myCapsuleCollider.SetRadius(transform.localScale.x / 2);
+        myCapsuleCollider.SetLength(transform.localScale.y - myCapsuleCollider.GetRadius());
+    
         maxRotation = Mathf.Abs(maxRotation);
-        restAngle = rotation;
+        restAngle = myCapsuleCollider.rotation;
     }
 
 
     public void Simulate() 
     {
-        float prevRotation = rotation;
+        float prevRotation = myCapsuleCollider.rotation;
         if (isPressed) 
         {
-            if (Mathf.Abs(maxRotation - rotation) > Math.Abs(angularVelocity) * Time.deltaTime)
+            if (Mathf.Abs(maxRotation - myCapsuleCollider.rotation) > Math.Abs(myCapsuleCollider.angularVelocity) * Time.deltaTime)
             {
-                rotation = rotation +  angularVelocity * Time.deltaTime;
+                myCapsuleCollider.rotation = myCapsuleCollider.rotation +  myCapsuleCollider.angularVelocity * Time.deltaTime;
             }
 
         }
         else 
-            if (Mathf.Abs(restAngle - rotation) > Math.Abs(angularVelocity) * Time.deltaTime)
+            if (Mathf.Abs(restAngle - myCapsuleCollider.rotation) > Math.Abs(myCapsuleCollider.angularVelocity) * Time.deltaTime)
             {
-                rotation = rotation -  angularVelocity * Time.deltaTime;
+                myCapsuleCollider.rotation = myCapsuleCollider.rotation -  myCapsuleCollider.angularVelocity * Time.deltaTime;
             }
 
         
-        currentAngularVelocity = (rotation - prevRotation) / Time.deltaTime;
+        myCapsuleCollider.angularVelocity = (myCapsuleCollider.rotation - prevRotation) / Time.deltaTime;
 
-    }
-
-    public Vector2 getTip() 
-    {
-        float angle = rotation;
-        Vector2 dir = new Vector2(Mathf.Cos(angle* (Mathf.PI / 180)), Mathf.Sin(angle* (Mathf.PI / 180)));
-        Vector2 tip = pos + dir * length;
-
-        return tip;
     }
 
 }

@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        MyCapsuleCollider col = this.GetComponent<MyCapsuleCollider>();
+        col.SetRadius(transform.localScale.y / 2);
+        col.SetLength(transform.localScale.x - col.GetRadius());
     }
 }
