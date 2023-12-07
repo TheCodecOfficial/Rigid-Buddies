@@ -97,6 +97,7 @@ public class MyRigidbody : MonoBehaviour
         transform.position = new Vector3(position.x, position.y, 0);
     }
 
+    //Returns the velocity of a point on this rigidbody
     public Vector2 PointVelocity(Vector2 point)
     {
         return velocity + angularVelocity * Vector2.Distance(position, point) * new Vector2(-(point - position).y, (point - position).x).normalized;

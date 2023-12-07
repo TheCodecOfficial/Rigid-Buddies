@@ -13,6 +13,7 @@ public class MyBoxCollider : MyCollider
     {
         base.Start();
 
+        //Because dynamic is not implemented yet
         myRigidbody.isStatic = true;
 
         this.size = new Vector2(transform.localScale.x, transform.localScale.y);
@@ -95,6 +96,7 @@ public class MyBoxCollider : MyCollider
 
     public bool Collides(MyCircleCollider other)
     {
+        //Let Circles handle the collision between these two
         return other.Collides(this);
     }
 
