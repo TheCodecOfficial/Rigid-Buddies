@@ -29,7 +29,7 @@ public class Ball : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             if(myRigidbody != null)
-                myRigidbody.AddForce(Vector2.up * 10000);
+                myRigidbody.AddForce(Vector2.up * 10000, Vector2.zero);
         }
     }
 

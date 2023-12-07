@@ -1,6 +1,8 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using Unity.Mathematics;
 
 public class PhysicsManager : MonoBehaviour
 {
@@ -29,6 +31,7 @@ public class PhysicsManager : MonoBehaviour
         {
             rigidbodies[i].Simulate();
             MyCollider collider = rigidbodies[i].GetCollider();
+            if(collider == null) continue;
             for (int j = i + 1; j < rigidbodies.Length; j++)
             {
                 MyCollider otherCollider = rigidbodies[j].GetCollider();
@@ -38,62 +41,10 @@ public class PhysicsManager : MonoBehaviour
                     HandleCollision(collider, otherCollider);
                 }
             }
-
         }
 
         return;
-        
-
-        //todo añadir colisiones con flippers
-        /*todo I guess input manager
-        for (int i = 0; i < flippers.Length; i++)
-        {   
-            flippers[i].Simulate();
-        }
-        for (int i = 0; i < balls.Length; i++)
-        {
-            balls[i].Simulate();
-            for (int j = i + 1; j < balls.Length; j++)
-            {
-                HandleBallBallCollision(balls[i], balls[j]);
-            }
-            for (var j = 0; j < flippers.Length; j++)
-            {
-				handleBallFlipperCollision(balls[i], flippers[j]);
-            }
-            HandleBallBorderCollision(balls[i], border);
-        }*/
-        
     }
-
-    // This is taken from the tutorial
-    // https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/04-pinball.html
-    /*void HandleBallBallCollision(Ball ball1, Ball ball2)
-    {
-        float restitution = Mathf.Min(ball1.restitution, ball2.restitution);
-        Vector2 dir = ball2.pos - ball1.pos;
-        float d = dir.magnitude;
-        if (d == 0.0 || d > ball1.radius + ball2.radius)
-            return;
-
-        dir /= d;
-
-        float corr = (ball1.radius + ball2.radius - d) / 2f;
-        ball1.pos += dir * -corr;
-        ball2.pos += dir * corr;
-
-        float v1 = Vector2.Dot(ball1.vel, dir);
-        float v2 = Vector2.Dot(ball2.vel, dir);
-
-        float m1 = ball1.mass;
-        float m2 = ball2.mass;
-
-        var newV1 = (m1 * v1 + m2 * v2 - m2 * (v1 - v2) * restitution) / (m1 + m2);
-        var newV2 = (m1 * v1 + m2 * v2 - m1 * (v2 - v1) * restitution) / (m1 + m2);
-
-        ball1.vel += dir * (newV1 - v1);
-        ball2.vel += dir * (newV2 - v2);
-    }*/
 
     // This is taken from the tutorial
     // https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/04-pinball.html
@@ -107,173 +58,114 @@ public class PhysicsManager : MonoBehaviour
         return a + ab * t;
     }
 
-    // This is taken from the tutorial
-    // https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/04-pinball.html
-    /*void HandleBallBorderCollision(Ball ball, Border border)
-    {
-        Vector2[] points = border.points;
-        if (points.Length < 3)
-            return;
-
-        // find closest segment;
-        Vector2 d;
-        Vector2 closest = new(0, 0);
-        Vector2 ab;
-        Vector2 normal = new(0, 0);
-
-        float dist, minDist = 0;
-
-        for (var i = 0; i < points.Length; i++)
-        {
-            Vector2 a = points[i];
-            Vector2 b = points[(i + 1) % points.Length];
-            Vector2 c = ClosestPointOnSegment(ball.pos, a, b);
-            d = ball.pos - c;
-            dist = d.magnitude;
-            if (i == 0 || dist < minDist)
-            {
-                minDist = dist;
-                closest = c;
-                ab = b - a;
-                normal = Vector2.Perpendicular(ab);
-            }
-        }
-
-        // push out
-        d = ball.pos - closest;
-        dist = d.magnitude;
-        if (dist == 0.0)
-        {
-            d = normal;
-            dist = normal.magnitude;
-        }
-        d /= dist;
-
-        if (Vector2.Dot(d, normal) >= 0.0)
-        {
-            if (dist > ball.radius)
-                return;
-            ball.pos += d * (ball.radius - dist);
-        }
-        else
-            ball.pos += d * -(dist + ball.radius);
-
-        // update velocity
-        float v = Vector2.Dot(ball.vel, d);
-        var vnew = Mathf.Abs(v) * ball.restitution;
-
-        ball.vel += d * (vnew - v);
-    }*/
-
-    /*void handleBallFlipperCollision(Ball ball, Flipper flipper) 
-	{
-		Vector2 closest = ClosestPointOnSegment(ball.pos, flipper.pos, flipper.getTip());
-		Vector2 dir = ball.pos - closest;
-		float d = dir.magnitude;
-		if (d == 0.0 || d > ball.radius + flipper.radius)
-			return;
-
-		dir = dir*(1 / d);
-
-		float corr = ball.radius + flipper.radius - d;
-		ball.pos += dir* corr;
-
-		// update velocitiy
-
-		Vector2 radius = closest + dir* flipper.radius - flipper.pos;
-
-		Vector2 surfaceVel = Vector2.Perpendicular(radius);
-		surfaceVel *= flipper.currentAngularVelocity;
-		float v = Vector2.Dot(ball.vel , dir);
-		float vnew = Vector2.Dot(surfaceVel,dir)* ball.restitution* flipper.restitution;
-
-		ball.vel = ball.vel + dir*( vnew - v);
-	}*/
-
-
+    
     void HandleCollision(MyCollider collider1, MyCollider collider2)
     {
-        //TODO: Broad phase check
+        if((collider1 as dynamic).Collides(collider2 as dynamic))  
+        {
+            
+            //Static colliders dont move anyways
+            if(collider1.GetRigidbody().isStatic && collider2.GetRigidbody().isStatic)
+                return;
+
+            //One is nonStatic
+            if(collider1.GetRigidbody().isStatic && !collider2.GetRigidbody().isStatic)
+            {
+                //Swap col1 and col2 to not duplicate code
+                MyCollider temp = collider1;
+                collider1 = collider2;
+                collider2 = temp;
+            }
+
+            if(!collider1.GetRigidbody().isStatic && collider2.GetRigidbody().isStatic)
+            {
+                (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                //This is how much they overlap, going from col2 to col1
+                Vector2 normal = penetration.Item3.normalized;
+
+                collider1.myRigidbody.position += normal * penetration.Item4;
+
+                Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
+                Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
+
+                Vector2 relVel = vel1 - vel2;
+
+                Debug.Log("RelVel:" + relVel);
+
+                float normalVel = Vector2.Dot(relVel, normal);
+
+                float j = -(1 + Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness)) * normalVel;
+                
+                j /= (1/collider1.myRigidbody.GetMass()) 
+                + (float)Math.Pow(Cross2D(penetration.Item1 - collider1.myRigidbody.position, normal), 2) / collider1.myRigidbody.momentOfInertia;
 
 
-        if(collider1.GetType() == typeof(MyCircleCollider) && collider2.GetType() == typeof(MyCircleCollider))
-        {
-            HandleCircleCircleCollision(collider1 as MyCircleCollider, collider2 as MyCircleCollider);
-        }
-        else if(collider1.GetType() == typeof(MyCircleCollider) && collider2.GetType() == typeof(MyCapsuleCollider))
-        {
-            HandleCircleCapsuleCollision(collider1 as MyCircleCollider, collider2 as MyCapsuleCollider);
-        }
-        else if(collider1.GetType() == typeof(MyCapsuleCollider) && collider2.GetType() == typeof(MyCircleCollider))
-        {
-            HandleCircleCapsuleCollision(collider2 as MyCircleCollider, collider1 as MyCapsuleCollider);
-        }
-        else
-        {
-            return;
-        }
 
+                collider1.myRigidbody.AddImpulse(j * normal, collider1.transform.InverseTransformPoint(penetration.Item1));
+
+                /*(Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+
+                //Vector of correction
+                Vector2 normal = penetration.Item3;
+                float dist = penetration.Item4;
+                //Where the force should be applied
+                Vector2 attackPoint = penetration.Item1;
+
+                //Point allready moving away
+                if(Vector2.Dot(normal, collider1.myRigidbody.PointVelocity(attackPoint)) > 0)
+                    return;
+
+                collider1.myRigidbody.position += normal * dist;
+
+                //Adjust velocity: direction of correction vector
+                float adjustmentVelocityStrength = Math.Abs(Vector2.Dot(normal, collider1.myRigidbody.velocity));
+                adjustmentVelocityStrength *= (1 + Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness));
+
+                collider1.myRigidbody.AddVelocity(normal * adjustmentVelocityStrength, attackPoint);*/
+            }
+
+            else
+            {
+
+                (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                //This is how much they overlap, going from col2 to col1
+                Vector2 normal = penetration.Item3.normalized;
+
+                collider1.myRigidbody.position += normal * penetration.Item4/2;
+                collider2.myRigidbody.position -= normal * penetration.Item4/2;
+
+                Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
+                Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
+
+                Vector2 relVel = vel1 - vel2;
+
+                float normalVel = Vector2.Dot(relVel, normal);
+
+                float j = -(1 + Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness)) * normalVel;
+                
+                j /= (1/collider1.myRigidbody.GetMass()) + 1/collider2.myRigidbody.GetMass() + 
+                + (float)Math.Pow(Cross2D(penetration.Item1 - collider1.myRigidbody.position, normal), 2) / collider1.myRigidbody.momentOfInertia
+                + (float)Math.Pow(Cross2D(penetration.Item2 - collider2.myRigidbody.position, normal), 2) / collider2.myRigidbody.momentOfInertia;
+                
+                collider1.myRigidbody.AddImpulse(j * normal, collider1.transform.InverseTransformPoint(penetration.Item1));
+                collider2.myRigidbody.AddImpulse(-j * normal, collider2.transform.InverseTransformPoint(penetration.Item2));
+
+                
+            }
+        }
+        
     }
 
-    void HandleCircleCircleCollision(MyCircleCollider circle1, MyCircleCollider circle2)
+
+    //Project vector a onto b
+    public Vector2 ProjectVector(Vector2 a, Vector2 b)
     {
-        MyRigidbody rigid1 = circle1.GetRigidbody();
-        MyRigidbody rigid2 = circle2.GetRigidbody();
-
-        float restitution = Mathf.Min(rigid1.GetRestitution(), rigid2.GetRestitution());
-        Vector2 dir = rigid2.GetPosition() - rigid1.GetPosition();
-        float d = dir.magnitude;
-
-        if (d == 0.0 || d > circle1.GetRadius() + circle2.GetRadius())
-            return;
-
-        dir /= d;
-
-        float corr = (circle1.GetRadius() + circle2.GetRadius() - d) / 2f;
-
-        rigid1.SetPosition(rigid1.GetPosition() + dir * -corr);
-        rigid2.SetPosition(rigid2.GetPosition() + dir * corr);
-
-        float v1 = Vector2.Dot(rigid1.GetVelocity(), dir);
-        float v2 = Vector2.Dot(rigid2.GetVelocity(), dir);
-
-        float m1 = rigid1.GetMass();
-        float m2 = rigid2.GetMass();
-
-        var newV1 = (m1 * v1 + m2 * v2 - m2 * (v1 - v2) * restitution) / (m1 + m2);
-        var newV2 = (m1 * v1 + m2 * v2 - m1 * (v2 - v1) * restitution) / (m1 + m2);
-
-        rigid1.SetVelocity(rigid1.GetVelocity() + dir * (newV1 - v1));
-        rigid2.SetVelocity(rigid2.GetVelocity() + dir * (newV2 - v2));
+        b.Normalize();
+        return Vector2.Dot(a, b) * b;
     }
-    
-    void HandleCircleCapsuleCollision(MyCircleCollider circle, MyCapsuleCollider capsule) 
+
+    public float Cross2D(Vector2 a, Vector2 b)
     {
-        Vector2 circlePos = circle.GetRigidbody().GetPosition();
-        Vector2 capsulePos = capsule.GetRigidbody().GetPosition();
-
-        Vector2 closest = ClosestPointOnSegment(circlePos, capsulePos - capsule.GetHalfLength(), capsulePos + capsule.GetHalfLength());
-        Vector2 dir = circlePos - closest;
-        float d = dir.magnitude;
-        if (d == 0.0 || d > circle.GetRadius() + capsule.GetRadius())
-            return;
-
-        Debug.Log("Circle and Capsule Collided");
-
-        dir = dir*(1 / d);
-
-        float corr = circle.GetRadius() + capsule.GetRadius() - d;
-        circle.GetRigidbody().SetPosition(circlePos + dir * corr);
-
-        // update velocitiy
-
-        Vector2 radius = closest + dir* capsule.GetRadius() - capsulePos;
-
-        Vector2 surfaceVel = Vector2.Perpendicular(radius);
-        surfaceVel *= capsule.GetAngularVelocity();
-        float v = Vector2.Dot(circle.GetRigidbody().GetVelocity(), dir);
-        float vnew = Vector2.Dot(surfaceVel,dir)* capsule.GetRigidbody().GetRestitution()* circle.GetRigidbody().GetRestitution();
-
-        circle.GetRigidbody().SetVelocity(circle.GetRigidbody().GetVelocity() + dir * (vnew - v));
+        return (a.x * b.y) - a.y * b.x; 
     }
 }

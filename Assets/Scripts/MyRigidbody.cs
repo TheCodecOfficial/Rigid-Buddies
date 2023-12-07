@@ -10,18 +10,26 @@ public class MyRigidbody : MonoBehaviour
     public float GetMass() {return mass;}
 
     [SerializeField]
-    private Vector2 velocity;
+    public Vector2 velocity;
     public Vector2 GetVelocity() {return velocity;}
     public void SetVelocity(Vector2 vel) {velocity = vel;}
 
     [SerializeField]
-    private Vector2 position;
+    public float angularVelocity;
+    public float GetAngularVelocity() {return angularVelocity;}
+    public void SetAngularVelocity(float angVel) {angularVelocity = angVel;}
+
+    [SerializeField]
+    //Center of mass position
+    public Vector2 position;
     public Vector2 GetPosition() {return position;}
     public void SetPosition(Vector2 pos) {position = pos;}
 
     [SerializeField]
-    private float restitution;
-    public float GetRestitution() {return restitution;}
+    //Center of mass position
+    public float momentOfInertia;
+    public float GetMomentOfInertia() {return momentOfInertia;}
+    public void SetMomentOfInertia(float inertia) {momentOfInertia = inertia;}
 
     [SerializeField]
     private MyCollider myCollider;
@@ -30,9 +38,11 @@ public class MyRigidbody : MonoBehaviour
     [SerializeField]
     private bool useGravity;
 
+    public float bounciness;
+
     //Set true for things that don't move
     [SerializeField]
-    private bool isStatic;
+    public bool isStatic;
 
     void Start()
     {
@@ -48,14 +58,31 @@ public class MyRigidbody : MonoBehaviour
             return;
 
         if(useGravity)
-            AddForce((Vector2)Physics.gravity);
-        UpdatePosition();
+            AddForce((Vector2)Physics.gravity, Vector2.zero);
+
+        ImplicitEuler();
         
     }
 
-    public void AddForce(Vector2 force)
+
+    //Adds velocity and torque of a force applied at position, both in local coordinates!
+    //(Actually, "force" is rather an impulse)
+    public void AddForce(Vector2 force, Vector2 position)
     {
-        velocity += force * Time.deltaTime;
+        velocity += force / mass * Time.deltaTime;
+        angularVelocity += (position.x * force.y - position.y * force.x) / momentOfInertia * Time.deltaTime;
+    }
+
+    public void AddImpulse(Vector2 impulse, Vector2 position)
+    {
+        velocity += impulse / mass;
+        angularVelocity += (position.x * impulse.y - position.y * impulse.x) / momentOfInertia;
+    }
+
+    public void AddVelocity(Vector2 velocity, Vector2 position)
+    {
+        this.velocity += velocity;
+        //angularVelocity += (position.x * force.y - position.y * force.x) / momentOfInertia * Time.deltaTime;
     }
 
     public void StopMovement()
@@ -64,10 +91,15 @@ public class MyRigidbody : MonoBehaviour
     }
 
     //Symplectic euler
-    public void UpdatePosition()
+    public void ImplicitEuler()
     {
         position += velocity * Time.deltaTime;
         transform.position = new Vector3(position.x, position.y, 0);
+    }
+
+    public Vector2 PointVelocity(Vector2 point)
+    {
+        return velocity + angularVelocity * Vector2.Distance(position, point) * new Vector2(-(point - position).y, (point - position).x).normalized;
     }
 
     
