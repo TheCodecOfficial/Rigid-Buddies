@@ -38,7 +38,13 @@ public class MyRigidbody : MonoBehaviour
     [SerializeField]
     private bool useGravity;
 
+    //if true, always this bounciness will be taken instead of Min
+    public bool overrideBounciness;
+
     public float bounciness;
+
+    public float dragAmount;
+    public float angularDragAmount;
 
     //Set true for things that don't move
     [SerializeField]
@@ -60,8 +66,15 @@ public class MyRigidbody : MonoBehaviour
         if(useGravity)
             AddForce((Vector2)Physics.gravity, Vector2.zero);
 
+        ApplyDrag();
         ImplicitEuler();
         
+    }
+
+    protected void ApplyDrag()
+    {
+        AddForce(-velocity.normalized * dragAmount, Vector2.zero);
+        angularVelocity = (1 - angularDragAmount) * angularVelocity;
     }
 
 
