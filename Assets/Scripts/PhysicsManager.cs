@@ -19,6 +19,14 @@ public class PhysicsManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R)){
+            foreach (Ball ball in balls){
+                ball.pos = new Vector2(0, 0) + Random.insideUnitCircle * 0.5f;
+                ball.vel = new Vector2(0, 0);
+            }
+        }
+
+
         //todo añadir colisiones con flippers
         //todo I guess input manager
         for (int i = 0; i < flippers.Length; i++)
@@ -173,7 +181,7 @@ public class PhysicsManager : MonoBehaviour
 		if (d == 0.0 || d > ball.radius + obstacle.radius)
 			return;
 
-        Debug.Log("Collision");
+        EffectsManager.instance.SpawnShockwave(obstacle.pos);
 
 		dir = dir *1f / d;
 
