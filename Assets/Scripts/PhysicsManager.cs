@@ -173,6 +173,8 @@ public class PhysicsManager : MonoBehaviour
 		if (d == 0.0 || d > ball.radius + obstacle.radius)
 			return;
 
+        Debug.Log("Collision");
+
 		dir = dir *1f / d;
 
 		float corr = ball.radius + obstacle.radius - d;
