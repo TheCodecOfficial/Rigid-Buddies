@@ -79,7 +79,6 @@ public class PhysicsManager : MonoBehaviour
 
             if(!collider1.GetRigidbody().isStatic && collider2.GetRigidbody().isStatic)
             {
-                Debug.Log("Colliding with " + collider1 + ", " + collider2);
 
                 (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
                 //This is how much they overlap, going from col2 to col1
@@ -137,9 +136,14 @@ public class PhysicsManager : MonoBehaviour
                 //This is how much they overlap, going from col2 to col1
                 Vector2 normal = penetration.Item3.normalized;
 
-                collider1.myRigidbody.position += normal * penetration.Item4/2;
-                collider2.myRigidbody.position -= normal * penetration.Item4/2;
+                //Displace rigidbodies according to weight (lighter get more displacement)
+                float m1 = collider1.myRigidbody.GetMass(); float m2 = collider2.myRigidbody.GetMass();
+                float massCoefficient1 = m1 / (m1 + m2);
+                float massCoefficient2 = 1 - massCoefficient1;
 
+                collider1.myRigidbody.position += massCoefficient2 * normal * penetration.Item4;
+                collider2.myRigidbody.position -= massCoefficient1 * normal * penetration.Item4;
+                
                 Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
                 Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
 
@@ -147,7 +151,14 @@ public class PhysicsManager : MonoBehaviour
 
                 float normalVel = Vector2.Dot(relVel, normal);
 
-                float j = -(1 + Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness)) * normalVel;
+                float bounciness;
+                if(collider1.myRigidbody.overrideBounciness)
+                    bounciness = collider1.myRigidbody.bounciness;
+                if(collider2.myRigidbody.overrideBounciness)
+                    bounciness = collider2.myRigidbody.bounciness;
+                else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
+
+                float j = -(1 + bounciness) * normalVel;
                 
                 j /= (1/collider1.myRigidbody.GetMass()) + 1/collider2.myRigidbody.GetMass() + 
                 + (float)Math.Pow(Cross2D(penetration.Item1 - collider1.myRigidbody.position, normal), 2) / collider1.myRigidbody.momentOfInertia

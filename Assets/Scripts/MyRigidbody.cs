@@ -54,6 +54,7 @@ public class MyRigidbody : MonoBehaviour
     {
         this.myCollider = GetComponent<MyCollider>();
         this.position = new Vector2(transform.position.x, transform.position.y);
+        this.velocity = new Vector2(0,0);
     }
 
 
@@ -83,12 +84,13 @@ public class MyRigidbody : MonoBehaviour
     public void AddForce(Vector2 force, Vector2 position)
     {
         velocity += force / mass * Time.deltaTime;
-        angularVelocity += (position.x * force.y - position.y * force.x) / momentOfInertia * Time.deltaTime;
+        angularVelocity += ((position.x * force.y - position.y * force.x) / momentOfInertia) * Time.deltaTime;
     }
 
     public void AddImpulse(Vector2 impulse, Vector2 position)
     {
-        velocity += impulse / mass;
+        Vector2 radius = new Vector2 (transform.TransformPoint(position).x,transform.TransformPoint(position).y) - position;
+        velocity += impulse / mass; 
         angularVelocity += (position.x * impulse.y - position.y * impulse.x) / momentOfInertia;
     }
 
@@ -101,12 +103,14 @@ public class MyRigidbody : MonoBehaviour
     public void StopMovement()
     {
         velocity = new Vector2(0,0);
+        angularVelocity = 0;
     }
 
     //Symplectic euler
     public void ImplicitEuler()
     {
         position += velocity * Time.deltaTime;
+        transform.eulerAngles += new Vector3(0, 0, angularVelocity * Time.deltaTime);
         transform.position = new Vector3(position.x, position.y, 0);
     }
 

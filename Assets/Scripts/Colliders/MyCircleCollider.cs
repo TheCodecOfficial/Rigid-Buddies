@@ -29,8 +29,6 @@ public class MyCircleCollider : MyCollider
         float radiusX = Math.Abs(radius / other.transform.localScale.x);
         float radiusY = Math.Abs(radius / other.transform.localScale.y);
 
-        Debug.Log("Center: " + pos + ", Radius: " + radiusX + ", " + radiusY);
-
         if(Math.Abs(pos.x) - radiusX > 0.5) return false;
         if(Math.Abs(pos.y) - radiusY > 0.5) return false;
 

@@ -12,10 +12,7 @@ public class MyBoxCollider : MyCollider
     protected override void Start()
     {
         base.Start();
-
-        //Because dynamic is not implemented yet
-        myRigidbody.isStatic = true;
-
+        
         this.size = new Vector2(transform.localScale.x, transform.localScale.y);
         myRigidbody.momentOfInertia = myRigidbody.GetMass() * 0.08333f * (size.x * size.x + size.y * size.y);
 
@@ -100,6 +97,12 @@ public class MyBoxCollider : MyCollider
         return other.Collides(this);
     }
 
+    public (Vector2, Vector2, Vector2, float) Penetrate(MyCircleCollider collider)
+    {
+        //Let Circles handle the collision between these two
+        return collider.Penetrate(this);
+    }
+
     public override List<Vector2> GetVertices()
     {
         List<Vector2> vertices = new();
@@ -136,42 +139,6 @@ public class MyBoxCollider : MyCollider
         if(finalPoint.y > 0.5f) finalPoint.y = 0.5f;
         
         return finalPoint;
-
-        /*
-        Vector2 p1, p2, p3, p4;
-        p1 = new Vector2(-1, -1);
-        p2 = new Vector2(1, -1);
-        p3 = new Vector2(1, 1);
-        p4 = new Vector2(-1, 1);
-
-        Vector2 finalPoint = ClosestPointOnSegment(point, p1, p2);
-        float minDist = Vector2.Distance(finalPoint, point);
-
-        Vector2 candidatePoint = ClosestPointOnSegment(point, p2, p3);
-        float newDist = Vector2.Distance(candidatePoint, point);
-        if(minDist > newDist)
-        {
-            minDist = newDist;
-            finalPoint = candidatePoint;
-        }
-
-        candidatePoint = ClosestPointOnSegment(point, p3, p4);
-        newDist = Vector2.Distance(candidatePoint, point);
-        if(minDist > newDist)
-        {
-            minDist = newDist;
-            finalPoint = candidatePoint;
-        }
-
-        candidatePoint = ClosestPointOnSegment(point, p4, p1);
-        newDist = Vector2.Distance(candidatePoint, point);
-        if(minDist > newDist)
-        {
-            minDist = newDist;
-            finalPoint = candidatePoint;
-        }
-
-        return finalPoint;*/
 
     }
 
