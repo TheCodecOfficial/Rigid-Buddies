@@ -26,8 +26,10 @@ public class MyCircleCollider : MyCollider
     {
         //In the box collider local transform, SCALE AFFECTED!
         Vector2 pos = other.transform.InverseTransformPoint(center);
-        float radiusX = radius / other.transform.localScale.x;
-        float radiusY = radius / other.transform.localScale.y;
+        float radiusX = Math.Abs(radius / other.transform.localScale.x);
+        float radiusY = Math.Abs(radius / other.transform.localScale.y);
+
+        Debug.Log("Center: " + pos + ", Radius: " + radiusX + ", " + radiusY);
 
         if(Math.Abs(pos.x) - radiusX > 0.5) return false;
         if(Math.Abs(pos.y) - radiusY > 0.5) return false;

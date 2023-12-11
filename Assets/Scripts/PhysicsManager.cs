@@ -79,6 +79,8 @@ public class PhysicsManager : MonoBehaviour
 
             if(!collider1.GetRigidbody().isStatic && collider2.GetRigidbody().isStatic)
             {
+                Debug.Log("Colliding with " + collider1 + ", " + collider2);
+                
                 (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
                 //This is how much they overlap, going from col2 to col1
                 Vector2 normal = penetration.Item3.normalized;
@@ -90,8 +92,6 @@ public class PhysicsManager : MonoBehaviour
 
                 Vector2 relVel = vel1 - vel2;
 
-                Debug.Log("RelVel:" + relVel);
-
                 float normalVel = Vector2.Dot(relVel, normal);
 
                 float j = -(1 + Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness)) * normalVel;
@@ -102,7 +102,6 @@ public class PhysicsManager : MonoBehaviour
 
 
                 collider1.myRigidbody.AddImpulse(j * normal, collider1.transform.InverseTransformPoint(penetration.Item1));
-
                 /*(Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
 
                 //Vector of correction
@@ -126,7 +125,7 @@ public class PhysicsManager : MonoBehaviour
 
             else
             {
-
+                
                 (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
                 //This is how much they overlap, going from col2 to col1
                 Vector2 normal = penetration.Item3.normalized;
