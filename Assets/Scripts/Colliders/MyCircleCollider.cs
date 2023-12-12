@@ -47,6 +47,7 @@ public class MyCircleCollider : MyCollider
     //Normal is the normal from other outwards
     public (Vector2, Vector2, Vector2, float) Penetrate(MyBoxCollider other)
     {
+        
         Vector2 pos = other.transform.InverseTransformPoint(center);
 
         //Find closest point on box
@@ -55,6 +56,8 @@ public class MyCircleCollider : MyCollider
 
         Vector2 attackPoint = center + (closestPoint - center).normalized * radius;
         Vector2 direction = (center - attackPoint).normalized;
+
+        Debug.Log("This: " + this + ", ThisPoint " + attackPoint + ", otherPoint " + closestPoint + ", normal " + direction + ", distance " + Vector2.Distance(attackPoint, closestPoint));
 
         return (attackPoint, closestPoint, direction, Vector2.Distance(attackPoint, closestPoint));
         

@@ -37,10 +37,10 @@ public class MyCapsuleCollider : MyCollider
     {
         if(this.myRigidbody == null)
             return;
-        Gizmos.color = Color.red;
+        /*Gizmos.color = Color.red;
         Gizmos.DrawSphere(this.myRigidbody.GetPosition(), 0.3f);
         Gizmos.DrawSphere(this.myRigidbody.GetPosition() + GetHalfLength(), 0.3f);
-        Gizmos.DrawSphere(this.myRigidbody.GetPosition() - GetHalfLength(), 0.3f);
+        Gizmos.DrawSphere(this.myRigidbody.GetPosition() - GetHalfLength(), 0.3f);*/
         
     }
     
