@@ -25,7 +25,7 @@ public class PhysicsManager : MonoBehaviour
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
         for(int i = 0; i < rigidbodies.Length; i++)
         {
