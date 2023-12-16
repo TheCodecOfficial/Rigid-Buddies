@@ -8,14 +8,39 @@ public class Polygon : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
 
+    void AdjustPositions()
+    {
+        Vector2 centroid = PolygonUtil.GetCentroid(vertices);
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            vertices[i] -= centroid;
+            if (transform.childCount > i) transform.GetChild(i).position += transform.position - (Vector3)centroid;
+        }
+        transform.position = centroid;
+    }
 
     public void Init(Vector2[] vertices)
     {
         this.vertices = vertices;
-        if (meshFilter == null) meshFilter = gameObject.AddComponent<MeshFilter>();
-        if (meshRenderer == null) meshRenderer = gameObject.AddComponent<MeshRenderer>();
+
+        AdjustPositions();
+
+        if (meshFilter == null) gameObject.AddComponent<MeshFilter>();
+        if (meshRenderer == null) gameObject.AddComponent<MeshRenderer>();
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
         RebuildMesh();
+    }
+
+    public Vector2[] GetVerticesWorld()
+    {
+        Vector2[] verticesWorld = new Vector2[vertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            verticesWorld[i] = vertices[i] + (Vector2)transform.position;
+        }
+        return verticesWorld;
     }
 
     public void RebuildMesh()

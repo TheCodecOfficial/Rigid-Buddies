@@ -54,9 +54,9 @@ public class SAT
             }
         }
         collisionPoint /= count;
-        Vector2 collisionPointA = PolygonUtil.GetClosestPoint(vertices_A, collisionPoint);
-        Vector2 collisionPointB = PolygonUtil.GetClosestPoint(vertices_B, collisionPoint);
-        collisionPoint = (collisionPointA + collisionPointB) / 2;
+        //Vector2 collisionPointA = PolygonUtil.GetClosestPoint(vertices_A, collisionPoint);
+        //Vector2 collisionPointB = PolygonUtil.GetClosestPoint(vertices_B, collisionPoint);
+        //collisionPoint = (collisionPointA + collisionPointB) / 2;
 
         // SAT: If all projections overlap, then the polygons must be intersecting
         return (true, collisionPoint);

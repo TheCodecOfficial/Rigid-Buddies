@@ -34,18 +34,19 @@ public class PolygonUtil
     }
 
     // Gets the index of the closes segment on a polygon defined by vertices to a point p
-    public static int GetClosestSegmentIndex(Vector2[] vertices, Vector2 p)
+    public static int GetClosestSegmentIndex(Vector2[] vertices, Vector2 p, bool reverse = false)
     {
         float closestDistance = 10000000;
         int closestIndex = 0;
         for (int i = 0; i < vertices.Length; i++)
         {
-            Vector2 point = ClosestPointOnSegment(p, vertices[i], vertices[(i + 1) % vertices.Length]);
+            int k = reverse ? i : vertices.Length - i - 1;
+            Vector2 point = ClosestPointOnSegment(p, vertices[k], vertices[(k + 1) % vertices.Length]);
             float distance = (p - point).sqrMagnitude;
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestIndex = i;
+                closestIndex = k;
             }
         }
         return closestIndex;
@@ -78,6 +79,17 @@ public class PolygonUtil
     public static Vector2 GetCentroid(Vector2 a, Vector2 b, Vector2 c)
     {
         return (a + b + c) / 3;
+    }
+
+    // Gets the centroid of a polygon defined by vertices
+    public static Vector2 GetCentroid(Vector2[] vertices)
+    {
+        Vector2 centroid = Vector2.zero;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            centroid += vertices[i];
+        }
+        return centroid / vertices.Length;
     }
 
     // Sorts the vertices of a polygon defined by vertices in clockwise order
@@ -209,25 +221,73 @@ public class PolygonUtil
     }
 
     // Creates a polygon game object from an array of vertices
-    public static void MakePolygon(Vector2[] vertices)
+    public static GameObject MakePolygon(Vector2[] vertices)
     {
         GameObject polygon = new("Polygon");
         Polygon polyScript = polygon.AddComponent<Polygon>();
         polyScript.Init(vertices);
+        return polygon;
+    }
+
+    // Creates a polygon game object with the necessary components for physics
+    public static GameObject MakePhysicsPolygon(Vector2[] vertices, float mass = 1)
+    {
+        GameObject polygon = MakePolygon(vertices);
+        polygon.AddComponent<MyPolygonCollider>();
+        MyRigidbody rb = polygon.AddComponent<MyRigidbody>();
+        rb.SetMass(mass);
+        PhysicsManager.instance.RefreshRigidbodies();
+        return polygon;
+    }
+
+    // Returns the normal of a line segment (a, b)
+    public static Vector2 GetNormal(Vector2 a, Vector2 b)
+    {
+        Vector2 ab = b - a;
+        Vector2 normal = new Vector2(-ab.y, ab.x).normalized;
+        return normal;
+    }
+
+    // Returns the normal of an egde on a polygon defined by vertices, given its index
+    public static Vector2 GetNormal(Vector2[] vertices, int index)
+    {
+        Vector2 a = vertices[index];
+        Vector2 b = vertices[(index + 1) % vertices.Length];
+        return GetNormal(a, b);
     }
 
     // Gets the normals of the edges of a polygon defined by vertices
     public static Vector2[] GetNormals(Vector2[] vertices)
     {
         Vector2[] normals = new Vector2[vertices.Length];
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            Vector2 a = vertices[i];
-            Vector2 b = vertices[(i + 1) % vertices.Length];
-            Vector2 ab = b - a;
-            Vector2 normal = new Vector2(-ab.y, ab.x).normalized;
-            normals[i] = normal;
-        }
+        for (int i = 0; i < vertices.Length; i++) normals[i] = GetNormal(vertices, i);
         return normals;
+    }
+
+    // Check if a point p is a corner of a polygon defined by vertices
+    public static bool IsPointOfPolygon(Vector2[] vertices, Vector2 p)
+    {
+        foreach (Vector2 vertex in vertices)
+        {
+            if (Vector2.Distance(vertex, p) < 0.01f) return true;
+        }
+        return false;
+    }
+
+    // Gets the closest normal of a polygon defined by vertices to a point p
+    public static Vector2 GetClosestNormal(Vector2[] vertices, Vector2 p)
+    {
+        int closestIndex = GetClosestSegmentIndex(vertices, p);
+        Vector2 closestPoint = ClosestPointOnSegment(p, vertices[closestIndex], vertices[(closestIndex + 1) % vertices.Length]);
+        Vector2 normal = GetNormal(vertices, closestIndex);
+        if (IsPointOfPolygon(vertices, closestPoint))
+        {
+            normal += GetNormal(vertices, (closestIndex + 1) % vertices.Length);
+            return normal.normalized;
+        }
+        else
+        {
+            return normal;
+        }
     }
 }
