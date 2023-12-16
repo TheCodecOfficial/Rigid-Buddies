@@ -10,7 +10,9 @@ public class Polygon : MonoBehaviour
 
     void AdjustPositions()
     {
-        Vector2 centroid = PolygonUtil.GetCentroid(vertices);
+        Vector2 centroid = PolygonUtil.GetBBCentroid(vertices);
+        Debug.Log("Centroid is " + centroid);
+        //Vector2 centroid = PolygonUtil.GetCentroid(vertices);
         for (int i = 0; i < vertices.Length; i++)
         {
             vertices[i] -= centroid;

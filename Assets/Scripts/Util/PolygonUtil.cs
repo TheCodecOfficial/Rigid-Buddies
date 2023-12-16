@@ -92,6 +92,26 @@ public class PolygonUtil
         return centroid / vertices.Length;
     }
 
+    // Gets the center of the bounding box of a polygon defined by vertices
+    public static Vector2 GetBBCentroid(Vector2[] vertices)
+    {
+        Vector2 centroid = Vector2.zero;
+        float minX = 1000000;
+        float maxX = -1000000;
+        float minY = 1000000;
+        float maxY = -1000000;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            if (vertices[i].x < minX) minX = vertices[i].x;
+            if (vertices[i].x > maxX) maxX = vertices[i].x;
+            if (vertices[i].y < minY) minY = vertices[i].y;
+            if (vertices[i].y > maxY) maxY = vertices[i].y;
+        }
+        centroid.x = (minX + maxX) / 2;
+        centroid.y = (minY + maxY) / 2;
+        return centroid;
+    }
+
     // Sorts the vertices of a polygon defined by vertices in clockwise order
     public static Vector2[] SortVertices(Vector2[] vertices)
     {
