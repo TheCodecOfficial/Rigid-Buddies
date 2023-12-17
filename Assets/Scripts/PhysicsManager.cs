@@ -64,12 +64,12 @@ public class PhysicsManager : MonoBehaviour
         if((collider1 as dynamic).Collides(collider2 as dynamic))  
         {
             
-            //Static colliders dont move anyways
-            if(collider1.GetRigidbody().isStatic && collider2.GetRigidbody().isStatic)
+            //Static and kinematic colliders dont move anyways
+            if((collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
                 return;
 
-            //One is nonStatic
-            if(collider1.GetRigidbody().isStatic && !collider2.GetRigidbody().isStatic)
+            //One is nonStatic or non kinematic
+            if((collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && !(collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
             {
                 //Swap col1 and col2 to not duplicate code
                 MyCollider temp = collider1;
@@ -77,7 +77,7 @@ public class PhysicsManager : MonoBehaviour
                 collider2 = temp;
             }
 
-            if(!collider1.GetRigidbody().isStatic && collider2.GetRigidbody().isStatic)
+            if(!(collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
             {
 
                 (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);

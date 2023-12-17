@@ -57,7 +57,7 @@ public class MyCircleCollider : MyCollider
         Vector2 attackPoint = center + (closestPoint - center).normalized * radius;
         Vector2 direction = (center - attackPoint).normalized;
 
-        Debug.Log("This: " + this + ", ThisPoint " + attackPoint + ", otherPoint " + closestPoint + ", normal " + direction + ", distance " + Vector2.Distance(attackPoint, closestPoint));
+        //Debug.Log("This: " + this + ", ThisPoint " + attackPoint + ", otherPoint " + closestPoint + ", normal " + direction + ", distance " + Vector2.Distance(attackPoint, closestPoint));
 
         return (attackPoint, closestPoint, direction, Vector2.Distance(attackPoint, closestPoint));
         

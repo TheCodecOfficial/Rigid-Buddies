@@ -152,7 +152,7 @@ public class MyBoxCollider : MyCollider
         normal = (thisPoint - otherPoint).normalized;
         distance = Vector2.Distance(thisPoint, otherPoint);
 
-        Debug.Log("This: " + this + ", ThisPoint " + thisPoint + ", otherPoint " + otherPoint + ", normal " + normal + ", distance " + distance);
+        //Debug.Log("This: " + this + ", ThisPoint " + thisPoint + ", otherPoint " + otherPoint + ", normal " + normal + ", distance " + distance);
 
         return (thisPoint, otherPoint, -normal, distance);
         

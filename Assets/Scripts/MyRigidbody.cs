@@ -44,6 +44,8 @@ public class MyRigidbody : MonoBehaviour
     //Set true for things that don't move
     [SerializeField]
     public bool isStatic;
+    public bool isKinematic;
+    public bool hasFixedPosition = false;
 
     void Start()
     {
@@ -77,7 +79,7 @@ public class MyRigidbody : MonoBehaviour
     //(Actually, "force" is rather an impulse)
     public void AddForce(Vector2 force, Vector2 position)
     {
-        velocity += force * Time.deltaTime;
+        velocity += force/mass * Time.deltaTime;
         //angularVelocity += ((position.x * force.y - position.y * force.x)) * Time.deltaTime;
     }
 
@@ -101,7 +103,8 @@ public class MyRigidbody : MonoBehaviour
     //Symplectic euler
     public void ImplicitEuler()
     {
-        transform.position += new Vector3(velocity.x, velocity.y) * Time.deltaTime;
+        if(!hasFixedPosition)
+            transform.position += new Vector3(velocity.x, velocity.y) * Time.deltaTime;
         transform.Rotate(new Vector3(0, 0, angularVelocity * (180 / (float)Math.PI) * Time.deltaTime ));
     }
 
