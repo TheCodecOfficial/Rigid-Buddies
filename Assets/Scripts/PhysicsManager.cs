@@ -12,12 +12,19 @@ public class PhysicsManager : MonoBehaviour
 
     public MyRigidbody[] rigidbodies;
 
+    public static PhysicsManager instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         // Quick way to get all ball and border components
         // Doesn't allow balls/borders to be added at runtime
 
-        rigidbodies = FindObjectsOfType<MyRigidbody>();
+        RefreshRigidbodies();
 
         //balls = FindObjectsOfType<Ball>();
         //border = FindObjectOfType<Border>();
@@ -25,17 +32,22 @@ public class PhysicsManager : MonoBehaviour
 
     }
 
-    void Update()
+    public void RefreshRigidbodies()
     {
-        for(int i = 0; i < rigidbodies.Length; i++)
+        rigidbodies = FindObjectsOfType<MyRigidbody>();
+    }
+
+    void FixedUpdate()
+    {
+        for (int i = 0; i < rigidbodies.Length; i++)
         {
             rigidbodies[i].Simulate();
             MyCollider collider = rigidbodies[i].GetCollider();
-            if(collider == null) continue;
+            if (collider == null) continue;
             for (int j = i + 1; j < rigidbodies.Length; j++)
             {
                 MyCollider otherCollider = rigidbodies[j].GetCollider();
-                if(otherCollider != null)
+                if (otherCollider != null)
                 {
                     //TODO: Broad Phase: Instead of having just a list, make spatial aware data structure
                     HandleCollision(collider, otherCollider);
@@ -58,10 +70,10 @@ public class PhysicsManager : MonoBehaviour
         return a + ab * t;
     }
 
-    
+
     void HandleCollision(MyCollider collider1, MyCollider collider2)
     {
-        if((collider1 as dynamic).Collides(collider2 as dynamic))  
+        if ((collider1 as dynamic).Collides(collider2 as dynamic))
         {
             collider1.OnCollisionEnterEvent.Invoke(collider2);
             collider2.OnCollisionEnterEvent.Invoke(collider1);
@@ -85,7 +97,7 @@ public class PhysicsManager : MonoBehaviour
                 //This is how much they overlap, going from col2 to col1
                 Vector2 normal = penetration.Item3.normalized;
 
-                if(false)
+                if (false)
                 {
                     Debug.Log(penetration.Item1 + ", " + penetration.Item2 + ", " + penetration.Item3 + ", " + penetration.Item4);
                 }
@@ -102,9 +114,9 @@ public class PhysicsManager : MonoBehaviour
                 //Debug.Log("Normalvel: " + normalVel);
 
                 float bounciness;
-                if(collider1.myRigidbody.overrideBounciness)
+                if (collider1.myRigidbody.overrideBounciness)
                     bounciness = collider1.myRigidbody.bounciness;
-                if(collider2.myRigidbody.overrideBounciness)
+                if (collider2.myRigidbody.overrideBounciness)
                     bounciness = collider2.myRigidbody.bounciness;
                 else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
 
@@ -115,7 +127,7 @@ public class PhysicsManager : MonoBehaviour
                 float rCrossNSquared = Vector3.Cross(rap, new Vector3(normal.x, normal.y, 0)).z;
                 rCrossNSquared = rCrossNSquared * rCrossNSquared;
 
-                float j = jTop / ((1/collider1.myRigidbody.GetMass()) + (rCrossNSquared / collider1.myRigidbody.momentOfInertia));
+                float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (rCrossNSquared / collider1.myRigidbody.momentOfInertia));
 
                 //Debug.Log("J: " + j + ", Normal: " + normal + ", Point: " + penetration.Item1 + normal * penetration.Item4);
                 collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
@@ -142,8 +154,8 @@ public class PhysicsManager : MonoBehaviour
 
             else
             {
-                
-                
+
+
                 (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
                 //This is how much they overlap, going from col2 to col1
                 Vector2 normal = penetration.Item3.normalized;
@@ -158,7 +170,7 @@ public class PhysicsManager : MonoBehaviour
 
                 collider1.transform.position += new Vector3(displacement1.x, displacement1.y, 0);
                 collider2.transform.position -= new Vector3(displacement2.x, displacement2.y, 0);
-                
+
                 Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
                 Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
 
@@ -167,9 +179,9 @@ public class PhysicsManager : MonoBehaviour
                 float normalVel = Vector2.Dot(relVel, normal);
 
                 float bounciness;
-                if(collider1.myRigidbody.overrideBounciness)
+                if (collider1.myRigidbody.overrideBounciness)
                     bounciness = collider1.myRigidbody.bounciness;
-                if(collider2.myRigidbody.overrideBounciness)
+                if (collider2.myRigidbody.overrideBounciness)
                     bounciness = collider2.myRigidbody.bounciness;
                 else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
 
@@ -182,16 +194,16 @@ public class PhysicsManager : MonoBehaviour
                 float rbCrossNSquared = Vector3.Cross(rbp, new Vector3(normal.x, normal.y, 0)).z;
                 rbCrossNSquared = rbCrossNSquared * rbCrossNSquared;
 
-                float j = jTop / ((1/collider1.myRigidbody.GetMass()) + (1/collider2.myRigidbody.GetMass()) 
+                float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (1 / collider2.myRigidbody.GetMass())
                 + (raCrossNSquared / collider1.myRigidbody.momentOfInertia) + (rbCrossNSquared / collider2.myRigidbody.momentOfInertia));
 
                 collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
                 collider2.myRigidbody.AddImpulse(-j * normal, penetration.Item2);
 
-                
+
             }
         }
-        
+
     }
 
 
@@ -204,6 +216,6 @@ public class PhysicsManager : MonoBehaviour
 
     public float Cross2D(Vector2 a, Vector2 b)
     {
-        return (a.x * b.y) - (a.y * b.x); 
+        return (a.x * b.y) - (a.y * b.x);
     }
 }

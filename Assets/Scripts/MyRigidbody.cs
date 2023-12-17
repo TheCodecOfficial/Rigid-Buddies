@@ -7,28 +7,29 @@ using System;
 public class MyRigidbody : MonoBehaviour
 {
     [SerializeField]
-    private float mass; 
-    public float GetMass() {return mass;}
+    private float mass;
+    public float GetMass() { return mass; }
+    public void SetMass(float mass) { this.mass = mass; }
 
     [SerializeField]
     public Vector2 velocity;
-    public Vector2 GetVelocity() {return velocity;}
-    public void SetVelocity(Vector2 vel) {velocity = vel;}
+    public Vector2 GetVelocity() { return velocity; }
+    public void SetVelocity(Vector2 vel) { velocity = vel; }
 
     [SerializeField]
     public float angularVelocity;
-    public float GetAngularVelocity() {return angularVelocity;}
-    public void SetAngularVelocity(float angVel) {angularVelocity = angVel;}
+    public float GetAngularVelocity() { return angularVelocity; }
+    public void SetAngularVelocity(float angVel) { angularVelocity = angVel; }
 
     [SerializeField]
     //Center of mass position
     public float momentOfInertia;
-    public float GetMomentOfInertia() {return momentOfInertia;}
-    public void SetMomentOfInertia(float inertia) {momentOfInertia = inertia;}
+    public float GetMomentOfInertia() { return momentOfInertia; }
+    public void SetMomentOfInertia(float inertia) { momentOfInertia = inertia; }
 
     [SerializeField]
     private MyCollider myCollider;
-    public MyCollider GetCollider() {return myCollider;}
+    public MyCollider GetCollider() { return myCollider; }
 
     [SerializeField]
     private bool useGravity;
@@ -50,14 +51,14 @@ public class MyRigidbody : MonoBehaviour
     void Start()
     {
         this.myCollider = GetComponent<MyCollider>();
-        this.velocity = new Vector2(0,0);
+        this.velocity = new Vector2(0, 0);
     }
 
 
     public void Simulate()
     {
         //Dont move if static
-        if(isStatic)
+        if (isStatic)
             return;
 
         if(useGravity)
@@ -65,7 +66,7 @@ public class MyRigidbody : MonoBehaviour
 
         ApplyDrag();
         ImplicitEuler();
-        
+
     }
 
     protected void ApplyDrag()
@@ -89,14 +90,14 @@ public class MyRigidbody : MonoBehaviour
         //Debug.Log("Adding impulse to " + this + ", impulse=" + impulse + ", attackPos=" + attackPos);
         Vector2 radius = new Vector3(attackPos.x, attackPos.y, 0) - this.transform.position;
         //Debug.Log("Radius: " + radius);
-        velocity += impulse / mass; 
+        velocity += impulse / mass;
         //Debug.Log("AngVelChange: " + Cross2D(radius, impulse) / momentOfInertia);
-        angularVelocity +=  Cross2D(radius, impulse) / momentOfInertia;
+        angularVelocity += Cross2D(radius, impulse) / momentOfInertia;
     }
 
     public void StopMovement()
     {
-        velocity = new Vector2(0,0);
+        velocity = new Vector2(0, 0);
         angularVelocity = 0;
     }
 
@@ -117,7 +118,7 @@ public class MyRigidbody : MonoBehaviour
 
     public float Cross2D(Vector2 a, Vector2 b)
     {
-        return (a.x * b.y) - (a.y * b.x); 
+        return (a.x * b.y) - (a.y * b.x);
     }
-    
+
 }
