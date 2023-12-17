@@ -63,7 +63,8 @@ public class PhysicsManager : MonoBehaviour
     {
         if((collider1 as dynamic).Collides(collider2 as dynamic))  
         {
-            
+            collider1.OnCollisionEnterEvent.Invoke(collider2);
+            collider2.OnCollisionEnterEvent.Invoke(collider1);
             //Static and kinematic colliders dont move anyways
             if((collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
                 return;

@@ -11,6 +11,7 @@ public class RotateAroundAPoint : MonoBehaviour
     public float rotationSpeed = 0.5f;
     //public MyRigidbody myRigidbody;
     public MyRigidbody[] myRigidbodies;
+    public float[] radii;
     bool[] firstUpdateAfterClick;
     bool[] firstUpdateAfterRelease;
     public bool isPressed = false;
@@ -22,6 +23,7 @@ public class RotateAroundAPoint : MonoBehaviour
     void Start(){
         firstUpdateAfterClick = new bool[myRigidbodies.Length];
         firstUpdateAfterRelease = new bool[myRigidbodies.Length];
+        radii = new float[myRigidbodies.Length];
         for(int i = 0; i < myRigidbodies.Length; i++){
             firstUpdateAfterClick[i] = true;
             firstUpdateAfterRelease[i] = true;
@@ -40,6 +42,7 @@ public class RotateAroundAPoint : MonoBehaviour
         
             Vector2 centerPoint = transform.position;
             Vector2 direction = centerPoint - (Vector2)myRigidbody.transform.position;
+            radii[i] = direction.magnitude;
             if(isPressed){
                 if (Mathf.Abs(maxRotation - myRigidbodies[0].transform.localRotation.eulerAngles.z) > 15)
                 {
@@ -77,13 +80,14 @@ public class RotateAroundAPoint : MonoBehaviour
                     firstUpdateAfterClick[i] = true;
                     if (firstUpdateAfterRelease[i])
                     {
+                        //set initial velocity
                         myRigidbody.StopMovement();
                         firstUpdateAfterRelease[i] = false;
                         Vector2 perpendicular = Vector2.Perpendicular(direction);
                         Vector2 impulse = -perpendicular.normalized * rotationSpeed * direction.magnitude;
                         myRigidbody.AddImpulse(impulse, (Vector2)myRigidbody.transform.position);
 
-                        //rotate
+                        //Set angular velocity
                         SetAngularVelocity(myRigidbody, rotationSpeed, 1);
                     }
                     else{

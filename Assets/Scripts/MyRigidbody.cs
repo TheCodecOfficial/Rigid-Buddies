@@ -61,7 +61,7 @@ public class MyRigidbody : MonoBehaviour
             return;
 
         if(useGravity)
-            AddForce((Vector2)Physics.gravity, Vector2.zero);
+            AddForce((Vector2)Physics.gravity*mass, Vector2.zero);
 
         ApplyDrag();
         ImplicitEuler();
