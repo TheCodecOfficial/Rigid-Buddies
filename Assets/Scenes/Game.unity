@@ -191,7 +191,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -258,8 +258,8 @@ Transform:
   m_GameObject: {fileID: 10539628}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.21643952, w: 0.97629607}
-  m_LocalPosition: {x: -6.9900002, y: -3.99, z: 0}
-  m_LocalScale: {x: 4.20812, y: 1.5, z: 1}
+  m_LocalPosition: {x: -6.099, y: -4.2844, z: 0}
+  m_LocalScale: {x: 6.071896, y: 1.71945, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1294046165}
@@ -293,8 +293,8 @@ Transform:
   m_GameObject: {fileID: 61308356}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.9790392, w: -0.20367193}
-  m_LocalPosition: {x: 5.872299, y: -4.0063, z: 0}
-  m_LocalScale: {x: 4.100395, y: 1.48395, z: 1}
+  m_LocalPosition: {x: 5.0201, y: -4.3163, z: 0}
+  m_LocalScale: {x: 5.9106755, y: 1.5953988, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1294046165}
@@ -347,7 +347,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -679,8 +679,8 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 1
   overrideBounciness: 0
-  bounciness: 0.8
-  dragAmount: 0.2
+  bounciness: 0.7
+  dragAmount: 0.3
   angularDragAmount: 0
   isStatic: 0
   isKinematic: 0
@@ -1677,7 +1677,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -1764,8 +1764,8 @@ Transform:
   m_GameObject: {fileID: 378860715}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1.6530008, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 3.283939, z: 1}
+  m_LocalPosition: {x: 0.9955, y: 0.0042, z: 0}
+  m_LocalScale: {x: 1.0083, y: 1.9690498, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1739110269}
@@ -2353,8 +2353,8 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 1
   overrideBounciness: 0
-  bounciness: 0.8
-  dragAmount: 0.2
+  bounciness: 0.7
+  dragAmount: 0.3
   angularDragAmount: 0
   isStatic: 0
   isKinematic: 0
@@ -2930,8 +2930,8 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 1
   overrideBounciness: 0
-  bounciness: 0.8
-  dragAmount: 0.2
+  bounciness: 0.7
+  dragAmount: 0.3
   angularDragAmount: 0
   isStatic: 0
   isKinematic: 0
@@ -3440,7 +3440,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -3809,8 +3809,8 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 1
   overrideBounciness: 0
-  bounciness: 0.8
-  dragAmount: 0.2
+  bounciness: 0.7
+  dragAmount: 0.3
   angularDragAmount: 0
   isStatic: 0
   isKinematic: 0
@@ -4222,8 +4222,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 807169744}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: 0.9743701, w: -0.22495091}
-  m_LocalPosition: {x: 3.789999, y: 0.3000002, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.97474676, w: -0.22331339}
+  m_LocalPosition: {x: 2.46, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -4231,7 +4231,7 @@ Transform:
   - {fileID: 2078715526}
   - {fileID: 1461892648}
   m_Father: {fileID: 392260991}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 206}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 205.807}
 --- !u!114 &807169746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4244,13 +4244,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c240a5a3b59095342b63f7934efa5dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 7
+  rotationSpeed: 12
   centerRigidbody: {fileID: 807169749}
   additionalFlipperComponents:
   - {fileID: 1078434440}
   - {fileID: 2078715529}
   isPressed: 0
-  maxRotation: 80
+  maxRotation: 145
 --- !u!114 &807169747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4300,7 +4300,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 1
-  bounciness: 0.7
+  bounciness: 0.4
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 0
@@ -5072,7 +5072,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -5315,7 +5315,7 @@ Transform:
   m_GameObject: {fileID: 1078434436}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: 0, w: 0}
-  m_LocalPosition: {x: 3.2700005, y: 0, z: 0}
+  m_LocalPosition: {x: 1.976, y: 0.008, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5921,7 +5921,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -6287,7 +6287,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -7047,7 +7047,7 @@ Transform:
   m_GameObject: {fileID: 1410853466}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2700014, y: 0, z: 0}
+  m_LocalPosition: {x: 1.94, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -7854,7 +7854,7 @@ Transform:
   m_GameObject: {fileID: 1628833870}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.4, y: -6.9, z: 0}
+  m_LocalPosition: {x: -4.41, y: -9.86, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -7896,8 +7896,8 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 1
   overrideBounciness: 0
-  bounciness: 0.8
-  dragAmount: 0.2
+  bounciness: 0.7
+  dragAmount: 0.3
   angularDragAmount: 0
   isStatic: 0
   isKinematic: 0
@@ -8206,7 +8206,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -8293,8 +8293,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1739110268}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.22495107, w: 0.9743701}
-  m_LocalPosition: {x: -4.9800005, y: 0.3, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.20704786, w: 0.97833085}
+  m_LocalPosition: {x: -3.4634361, y: -0.184618, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -8302,7 +8302,7 @@ Transform:
   - {fileID: 378860716}
   - {fileID: 1760924997}
   m_Father: {fileID: 392260991}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -26}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -23.899}
 --- !u!114 &1739110270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8315,13 +8315,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c240a5a3b59095342b63f7934efa5dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: -7
+  rotationSpeed: -12
   centerRigidbody: {fileID: 1739110273}
   additionalFlipperComponents:
   - {fileID: 1410853470}
   - {fileID: 378860719}
   isPressed: 0
-  maxRotation: 100
+  maxRotation: 35
 --- !u!114 &1739110271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8371,7 +8371,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 1
-  bounciness: 0.7
+  bounciness: 0.4
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 0
@@ -8637,8 +8637,8 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 1
   overrideBounciness: 0
-  bounciness: 0.8
-  dragAmount: 0.2
+  bounciness: 0.7
+  dragAmount: 0.3
   angularDragAmount: 0
   isStatic: 0
   isKinematic: 0
@@ -8921,8 +8921,8 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 1
   overrideBounciness: 0
-  bounciness: 0.8
-  dragAmount: 0.2
+  bounciness: 0.7
+  dragAmount: 0.3
   angularDragAmount: 0
   isStatic: 0
   isKinematic: 0
@@ -9231,7 +9231,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -9357,7 +9357,7 @@ MonoBehaviour:
   myCollider: {fileID: 0}
   useGravity: 0
   overrideBounciness: 0
-  bounciness: 0.8
+  bounciness: 0.6
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -10020,8 +10020,8 @@ Transform:
   m_GameObject: {fileID: 2078715525}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1.6530004, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 3.2839382, z: 1}
+  m_LocalPosition: {x: 1.0216, y: 0.0069, z: 0}
+  m_LocalScale: {x: 0.9863, y: 2.0212638, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 807169745}
