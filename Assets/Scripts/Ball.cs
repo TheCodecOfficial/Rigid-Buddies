@@ -28,7 +28,7 @@ public class Ball : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            if(myRigidbody != null)
+            if(myRigidbody != null && myRigidbody.tag == "projectile")
                 myRigidbody.AddForce(Vector2.up * 10000, Vector2.zero);
         }
     }

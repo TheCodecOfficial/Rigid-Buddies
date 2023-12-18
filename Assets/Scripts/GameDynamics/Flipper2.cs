@@ -56,7 +56,7 @@ public class Flipper2 : MonoBehaviour
                 Vector2 applicationPoint = 2f*(Vector2) transform.right + (Vector2)transform.position;
                 foreach (MyRigidbody myRigidbody in myRigidbodies)
                 {
-                    myRigidbody.AddImpulse(impulse, applicationPoint);
+                    myRigidbody.AddForce(impulse, applicationPoint);
                 }
                 
                 //Vector2 radius = new Vector3(0, 0.5f, 0) - this.transform.position;
@@ -81,7 +81,7 @@ public class Flipper2 : MonoBehaviour
                 //Vector2 applicationPoint = myRigidbody.transform.position + myRigidbody.transform.up* -0.5f;
                 foreach (MyRigidbody myRigidbody in myRigidbodies)
                 {
-                    myRigidbody.AddImpulse(impulse, applicationPoint);
+                    myRigidbody.AddForce(impulse, applicationPoint);
                 }
 
                 

@@ -11,6 +11,9 @@ public class UserInput : MonoBehaviour
 
     public RotateAroundAPoint rotateAroundAPointRight;
     public RotateAroundAPoint rotateAroundAPointLeft;
+
+    public Flipper3 flipper3Right;
+    public Flipper3 flipper3Left;
     //public delegate void MKeyPressedHandler();
     //public event MKeyPressedHandler MKeyPressed;
     //public event MKeyPressedHandler XKeyPressed;
@@ -36,12 +39,14 @@ public class UserInput : MonoBehaviour
         {
             flipperRight.isPressed = true;
             rotateAroundAPointRight.isPressed = true;
+            flipper3Right.isPressed = true;
             //print("right flipper pressed");
         }
         if (Input.GetKeyUp(KeyCode.M))
         {
             flipperRight.isPressed = false;
             rotateAroundAPointRight.isPressed = false;  
+            flipper3Right.isPressed = false;
             //print("right flipper released");
         }
 
@@ -51,6 +56,7 @@ public class UserInput : MonoBehaviour
         {
             flipperLeft.isPressed = true;
             rotateAroundAPointLeft.isPressed = true;
+            flipper3Left.isPressed = true;
             //print("left flipper pressed");
         }
         
@@ -58,6 +64,7 @@ public class UserInput : MonoBehaviour
         {
             flipperLeft.isPressed = false;
             rotateAroundAPointLeft.isPressed = false;
+            flipper3Left.isPressed = false;
             //print("left flipper released");
         }
         
