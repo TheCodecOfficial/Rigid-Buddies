@@ -92,113 +92,105 @@ public class PhysicsManager : MonoBehaviour
 
             if(!(collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
             {
-
-                (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
-                //This is how much they overlap, going from col2 to col1
-                Vector2 normal = penetration.Item3.normalized;
-
-                if (false)
+                int t = 0;
+                while((collider1 as dynamic).Collides(collider2 as dynamic) && t < 5)
                 {
-                    Debug.Log(penetration.Item1 + ", " + penetration.Item2 + ", " + penetration.Item3 + ", " + penetration.Item4);
+                    (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                    //This is how much they overlap, going from col2 to col1
+                    Vector2 normal = penetration.Item3.normalized;
+
+                    if (false)
+                    {
+                        Debug.Log(penetration.Item1 + ", " + penetration.Item2 + ", " + penetration.Item3 + ", " + penetration.Item4);
+                    }
+                    Vector2 displacement = normal * penetration.Item4;
+                    collider1.transform.position += new Vector3(displacement.x, displacement.y, 0);
+
+                    Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
+                    Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
+
+                    Vector2 relVel = vel1 - vel2;
+
+                    float normalVel = Vector2.Dot(relVel, normal);
+
+                    //Debug.Log("Normalvel: " + normalVel);
+
+                    float bounciness;
+                    if (collider1.myRigidbody.overrideBounciness)
+                        bounciness = collider1.myRigidbody.bounciness;
+                    if (collider2.myRigidbody.overrideBounciness)
+                        bounciness = collider2.myRigidbody.bounciness;
+                    else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
+
+
+                    float jTop = -(1 + bounciness) * normalVel;
+
+                    Vector3 rap = new Vector3(penetration.Item1.x, penetration.Item1.y, 0) - collider1.transform.position;
+                    float rCrossNSquared = Vector3.Cross(rap, new Vector3(normal.x, normal.y, 0)).z;
+                    rCrossNSquared = rCrossNSquared * rCrossNSquared;
+
+                    float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (rCrossNSquared / collider1.myRigidbody.momentOfInertia));
+
+                    //Debug.Log("J: " + j + ", Normal: " + normal + ", Point: " + penetration.Item1 + normal * penetration.Item4);
+                    collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
+                    collider1.myRigidbody.ImplicitEuler();
+                    t++;
                 }
-                Vector2 displacement = normal * penetration.Item4;
-                collider1.transform.position += new Vector3(displacement.x, displacement.y, 0);
-
-                Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
-                Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
-
-                Vector2 relVel = vel1 - vel2;
-
-                float normalVel = Vector2.Dot(relVel, normal);
-
-                //Debug.Log("Normalvel: " + normalVel);
-
-                float bounciness;
-                if (collider1.myRigidbody.overrideBounciness)
-                    bounciness = collider1.myRigidbody.bounciness;
-                if (collider2.myRigidbody.overrideBounciness)
-                    bounciness = collider2.myRigidbody.bounciness;
-                else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
-
-
-                float jTop = -(1 + bounciness) * normalVel;
-
-                Vector3 rap = new Vector3(penetration.Item1.x, penetration.Item1.y, 0) - collider1.transform.position;
-                float rCrossNSquared = Vector3.Cross(rap, new Vector3(normal.x, normal.y, 0)).z;
-                rCrossNSquared = rCrossNSquared * rCrossNSquared;
-
-                float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (rCrossNSquared / collider1.myRigidbody.momentOfInertia));
-
-                //Debug.Log("J: " + j + ", Normal: " + normal + ", Point: " + penetration.Item1 + normal * penetration.Item4);
-                collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
-                /*(Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
-
-                //Vector of correction
-                Vector2 normal = penetration.Item3;
-                float dist = penetration.Item4;
-                //Where the force should be applied
-                Vector2 attackPoint = penetration.Item1;
-
-                //Point allready moving away
-                if(Vector2.Dot(normal, collider1.myRigidbody.PointVelocity(attackPoint)) > 0)
-                    return;
-
-                collider1.myRigidbody.position += normal * dist;
-
-                //Adjust velocity: direction of correction vector
-                float adjustmentVelocityStrength = Math.Abs(Vector2.Dot(normal, collider1.myRigidbody.velocity));
-                adjustmentVelocityStrength *= (1 + Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness));
-
-                collider1.myRigidbody.AddVelocity(normal * adjustmentVelocityStrength, attackPoint);*/
+                
             }
 
             else
             {
+                int t = 0;
+                while((collider1 as dynamic).Collides(collider2 as dynamic) && t < 5)
+                {
+                    (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                    //This is how much they overlap, going from col2 to col1
+                    Vector2 normal = penetration.Item3.normalized;
 
+                    //Displace rigidbodies according to weight (lighter get more displacement)
+                    float m1 = collider1.myRigidbody.GetMass(); float m2 = collider2.myRigidbody.GetMass();
+                    float massCoefficient1 = m1 / (m1 + m2);
+                    float massCoefficient2 = 1 - massCoefficient1;
 
-                (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
-                //This is how much they overlap, going from col2 to col1
-                Vector2 normal = penetration.Item3.normalized;
+                    Vector2 displacement1 = massCoefficient2 * normal * penetration.Item4;
+                    Vector2 displacement2 = massCoefficient1 * normal * penetration.Item4;
 
-                //Displace rigidbodies according to weight (lighter get more displacement)
-                float m1 = collider1.myRigidbody.GetMass(); float m2 = collider2.myRigidbody.GetMass();
-                float massCoefficient1 = m1 / (m1 + m2);
-                float massCoefficient2 = 1 - massCoefficient1;
+                    collider1.transform.position += new Vector3(displacement1.x, displacement1.y, 0);
+                    collider2.transform.position -= new Vector3(displacement2.x, displacement2.y, 0);
 
-                Vector2 displacement1 = massCoefficient2 * normal * penetration.Item4;
-                Vector2 displacement2 = massCoefficient1 * normal * penetration.Item4;
+                    Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
+                    Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
 
-                collider1.transform.position += new Vector3(displacement1.x, displacement1.y, 0);
-                collider2.transform.position -= new Vector3(displacement2.x, displacement2.y, 0);
+                    Vector2 relVel = vel1 - vel2;
 
-                Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
-                Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
+                    float normalVel = Vector2.Dot(relVel, normal);
 
-                Vector2 relVel = vel1 - vel2;
+                    float bounciness;
+                    if (collider1.myRigidbody.overrideBounciness)
+                        bounciness = collider1.myRigidbody.bounciness;
+                    if (collider2.myRigidbody.overrideBounciness)
+                        bounciness = collider2.myRigidbody.bounciness;
+                    else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
 
-                float normalVel = Vector2.Dot(relVel, normal);
+                    float jTop = -(1 + bounciness) * normalVel;
 
-                float bounciness;
-                if (collider1.myRigidbody.overrideBounciness)
-                    bounciness = collider1.myRigidbody.bounciness;
-                if (collider2.myRigidbody.overrideBounciness)
-                    bounciness = collider2.myRigidbody.bounciness;
-                else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
+                    Vector3 rap = new Vector3(penetration.Item1.x, penetration.Item1.y, 0) - collider1.transform.position;
+                    Vector3 rbp = new Vector3(penetration.Item2.x, penetration.Item2.y, 0) - collider2.transform.position;
+                    float raCrossNSquared = Vector3.Cross(rap, new Vector3(normal.x, normal.y, 0)).z;
+                    raCrossNSquared = raCrossNSquared * raCrossNSquared;
+                    float rbCrossNSquared = Vector3.Cross(rbp, new Vector3(normal.x, normal.y, 0)).z;
+                    rbCrossNSquared = rbCrossNSquared * rbCrossNSquared;
 
-                float jTop = -(1 + bounciness) * normalVel;
+                    float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (1 / collider2.myRigidbody.GetMass())
+                    + (raCrossNSquared / collider1.myRigidbody.momentOfInertia) + (rbCrossNSquared / collider2.myRigidbody.momentOfInertia));
 
-                Vector3 rap = new Vector3(penetration.Item1.x, penetration.Item1.y, 0) - collider1.transform.position;
-                Vector3 rbp = new Vector3(penetration.Item2.x, penetration.Item2.y, 0) - collider2.transform.position;
-                float raCrossNSquared = Vector3.Cross(rap, new Vector3(normal.x, normal.y, 0)).z;
-                raCrossNSquared = raCrossNSquared * raCrossNSquared;
-                float rbCrossNSquared = Vector3.Cross(rbp, new Vector3(normal.x, normal.y, 0)).z;
-                rbCrossNSquared = rbCrossNSquared * rbCrossNSquared;
-
-                float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (1 / collider2.myRigidbody.GetMass())
-                + (raCrossNSquared / collider1.myRigidbody.momentOfInertia) + (rbCrossNSquared / collider2.myRigidbody.momentOfInertia));
-
-                collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
-                collider2.myRigidbody.AddImpulse(-j * normal, penetration.Item2);
+                    collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
+                    collider2.myRigidbody.AddImpulse(-j * normal, penetration.Item2);
+                    collider1.myRigidbody.ImplicitEuler();
+                    collider2.myRigidbody.ImplicitEuler();
+                    t++;
+                }
 
 
             }
