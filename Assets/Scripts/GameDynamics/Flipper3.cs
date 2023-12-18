@@ -36,7 +36,7 @@ public class Flipper3 : MonoBehaviour
 
 
         if(isPressed){
-            if (Mathf.Abs(maxRotation - centerRigidbody.transform.localRotation.eulerAngles.z) > 5)
+            if (Mathf.Abs(maxRotation - centerRigidbody.transform.localRotation.eulerAngles.z) > 10)
             {
                 if (firstUpdateAfterClick)
                 {
@@ -54,9 +54,10 @@ public class Flipper3 : MonoBehaviour
                 
                 centerRigidbody.StopMovement();
             }
+            
         }
         else{
-            if (Mathf.Abs(restAngle - centerRigidbody.transform.localRotation.eulerAngles.z) > 5)
+            if (Mathf.Abs(restAngle - centerRigidbody.transform.localRotation.eulerAngles.z) > 10)
             {
                 if (firstUpdateAfterRelease)
                 {
@@ -71,6 +72,7 @@ public class Flipper3 : MonoBehaviour
             else{
                 centerRigidbody.StopMovement();
             }
+            
         }
 
         foreach (MyRigidbody myRigidbodyadditional in additionalFlipperComponents)

@@ -454,6 +454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &76061676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -798,6 +799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &133827354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,6 +1049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &224081257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1400,6 +1403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &288846982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1729,8 +1733,8 @@ MonoBehaviour:
   momentOfInertia: 0
   myCollider: {fileID: 0}
   useGravity: 0
-  overrideBounciness: 0
-  bounciness: 0.5
+  overrideBounciness: 1
+  bounciness: 0.7
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -1817,13 +1821,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 807169745}
+  - {fileID: 1739110269}
   - {fileID: 173663523}
   - {fileID: 246110440}
   - {fileID: 1428367852}
   - {fileID: 1766788002}
   - {fileID: 1345871688}
-  - {fileID: 1739110269}
-  - {fileID: 807169745}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &398259304
@@ -2385,6 +2389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &501297428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3458,6 +3463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &742560073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3961,7 +3967,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 807169744}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: 0.9816273, w: -0.19080894}
+  m_LocalRotation: {x: 0, y: -0, z: 0.9743701, w: -0.22495091}
   m_LocalPosition: {x: 4.31, y: 0.3000002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -3970,7 +3976,7 @@ Transform:
   - {fileID: 2078715526}
   - {fileID: 1461892648}
   m_Father: {fileID: 392260991}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 202}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 206}
 --- !u!114 &807169746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3983,13 +3989,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c240a5a3b59095342b63f7934efa5dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 5
+  rotationSpeed: 7
   centerRigidbody: {fileID: 807169749}
   additionalFlipperComponents:
   - {fileID: 1078434440}
   - {fileID: 2078715529}
   isPressed: 0
-  maxRotation: 90
+  maxRotation: 80
 --- !u!114 &807169747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4038,8 +4044,8 @@ MonoBehaviour:
   momentOfInertia: 0
   myCollider: {fileID: 0}
   useGravity: 0
-  overrideBounciness: 0
-  bounciness: 0.5
+  overrideBounciness: 1
+  bounciness: 0.7
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 0
@@ -4479,6 +4485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &968605889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4917,6 +4924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &1028262766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5106,8 +5114,8 @@ MonoBehaviour:
   momentOfInertia: 0
   myCollider: {fileID: 0}
   useGravity: 0
-  overrideBounciness: 0
-  bounciness: 0.5
+  overrideBounciness: 1
+  bounciness: 0.7
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -5214,6 +5222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &1120102511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5418,6 +5427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &1196282483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6283,6 +6293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &1398731810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6786,8 +6797,8 @@ MonoBehaviour:
   momentOfInertia: 0
   myCollider: {fileID: 0}
   useGravity: 0
-  overrideBounciness: 0
-  bounciness: 0.5
+  overrideBounciness: 1
+  bounciness: 0.7
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -7093,6 +7104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &1455333910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7700,6 +7712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &1639440270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7976,7 +7989,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1739110268}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.19080894, w: 0.9816273}
+  m_LocalRotation: {x: 0, y: 0, z: -0.22495107, w: 0.9743701}
   m_LocalPosition: {x: -4.46, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -7985,7 +7998,7 @@ Transform:
   - {fileID: 378860716}
   - {fileID: 1760924997}
   m_Father: {fileID: 392260991}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -22}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -26}
 --- !u!114 &1739110270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7998,13 +8011,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c240a5a3b59095342b63f7934efa5dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: -5
+  rotationSpeed: -7
   centerRigidbody: {fileID: 1739110273}
   additionalFlipperComponents:
   - {fileID: 1410853470}
   - {fileID: 378860719}
   isPressed: 0
-  maxRotation: 90
+  maxRotation: 100
 --- !u!114 &1739110271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8053,8 +8066,8 @@ MonoBehaviour:
   momentOfInertia: 0
   myCollider: {fileID: 0}
   useGravity: 0
-  overrideBounciness: 0
-  bounciness: 0.5
+  overrideBounciness: 1
+  bounciness: 0.7
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 0
@@ -8724,6 +8737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &1859044912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9566,6 +9580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &2049533819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9754,8 +9769,8 @@ MonoBehaviour:
   momentOfInertia: 0
   myCollider: {fileID: 0}
   useGravity: 0
-  overrideBounciness: 0
-  bounciness: 0.5
+  overrideBounciness: 1
+  bounciness: 0.7
   dragAmount: 0
   angularDragAmount: 0
   isStatic: 1
@@ -9862,6 +9877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1189332837}
+  maxHitNumber: 3
 --- !u!114 &2124067114
 MonoBehaviour:
   m_ObjectHideFlags: 0

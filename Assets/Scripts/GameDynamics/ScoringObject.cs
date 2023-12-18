@@ -6,25 +6,35 @@ public class ScoringObject : MonoBehaviour
 {
     MyCollider myCollider;
     public ScoreManager scoreManager;
+    public int maxHitNumber = 3;
+    int hitNumber = 0;
+    SpriteRenderer spriteRenderer;
+    Color intialColor;
     // Start is called before the first frame update
     void Start()
     {
         myCollider = GetComponent<MyCollider>();
-        myCollider.OnCollisionEnterEvent.AddListener(scoreManager.AddPoints);
-        myCollider.OnCollisionEnterEvent.AddListener(DisableObject);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        myCollider.OnCollisionEnterEvent.AddListener(Hitted);
+        intialColor = spriteRenderer.color;
 
     }
+    void Hitted(MyCollider myCollider){
+        if(myCollider.tag == "projectile")
+        {
+            hitNumber++;
+            scoreManager.AddPoints( myCollider);
 
-    void DisableObject(MyCollider myCollider)
-    {
-        if(myCollider.tag == "projectile"){
-            //gameObject.SetActive(false);
-            Destroy(gameObject);
+            if(hitNumber >= maxHitNumber){
+                //gameObject.SetActive(false);
+                Destroy(gameObject);
+            }else{
+                
+                float darkness = ((float)maxHitNumber - (float)hitNumber)/(float)maxHitNumber;
+                spriteRenderer.color = new Color(intialColor.r*darkness, intialColor.g*darkness, intialColor.b*darkness);
+            }
         }
     }
-
-
-
-
+    
 
 }
