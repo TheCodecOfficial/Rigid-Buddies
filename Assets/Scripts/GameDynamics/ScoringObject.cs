@@ -15,11 +15,11 @@ public class ScoringObject : MonoBehaviour
     {
         myCollider = GetComponent<MyCollider>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        myCollider.OnCollisionEnterEvent.AddListener(Hitted);
+        myCollider.OnCollisionEnterEvent.AddListener(OnHit);
         intialColor = spriteRenderer.color;
 
     }
-    void Hitted(MyCollider myCollider){
+    void OnHit(MyCollider myCollider){
         if(myCollider.tag == "projectile")
         {
             hitNumber++;
