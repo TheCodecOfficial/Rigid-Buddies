@@ -71,8 +71,9 @@ public class MyRigidbody : MonoBehaviour
 
     protected void ApplyDrag()
     {
-        AddForce(-velocity.normalized * dragAmount, Vector2.zero);
-        //angularVelocity = (1 - angularDragAmount) * angularVelocity;
+        velocity = velocity - dragAmount * velocity * Time.deltaTime;
+        //AddForce(-velocity * dragAmount, Vector2.zero);
+        angularVelocity = angularVelocity - angularDragAmount * angularVelocity * Time.deltaTime;
     }
 
 

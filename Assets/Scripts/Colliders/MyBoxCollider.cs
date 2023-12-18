@@ -103,6 +103,7 @@ public class MyBoxCollider : MyCollider
     //Checks for collision with other and caches the colliding point in world coordinates for penetration
     public bool Collides(MyBoxCollider other)
     {
+        
         //Check if any vertex is inside other
         foreach(Vector2 point in GetVertices())
         {
@@ -135,23 +136,24 @@ public class MyBoxCollider : MyCollider
     {
         Vector2 thisPoint; Vector2 otherPoint; Vector2 normal;
         float distance;
+    
         
         if(cachedThis)
         {
             thisPoint = cachedPos;
             //World coordinates of other point
-            otherPoint = other.transform.TransformPoint(other.FindClosestPointOnBorder(other.transform.InverseTransformPoint(cachedPos)));
+            otherPoint = other.FindClosestPointOnBorder(cachedPos);
         }
         else
         {
-            otherPoint = cachedPos;
+            otherPoint = other.cachedPos;
             //World coordinates of other point
-            thisPoint = this.transform.TransformPoint(this.FindClosestPointOnBorder(this.transform.InverseTransformPoint(cachedPos)));
+            thisPoint = this.FindClosestPointOnBorder(otherPoint);
         }
         normal = (thisPoint - otherPoint).normalized;
         distance = Vector2.Distance(thisPoint, otherPoint);
 
-        Debug.Log("This: " + this + ", ThisPoint " + thisPoint + ", otherPoint " + otherPoint + ", normal " + normal + ", distance " + distance);
+        //Debug.Log("This: " + this + ", ThisPoint " + thisPoint + ", otherPoint " + otherPoint + ", normal " + normal + ", distance " + distance);
 
         return (thisPoint, otherPoint, -normal, distance);
         
@@ -205,22 +207,49 @@ public class MyBoxCollider : MyCollider
     }
 
     //Returns the closest point on the collider to another point INSIDE of the collider
-    //Point is in local coordinates!! (Call InverseTransformPoint() first)
+    //Point is in world coordinates!!
     public Vector2 FindClosestPointOnBorder(Vector2 point)
     {
-        Vector2 finalPoint = point;
+        Debug.Log("This: " + transform.position + ", other: " + point);
 
-        if(Math.Abs(finalPoint.x) > Math.Abs(finalPoint.y))
+        List<Vector2> points = GetVertices();
+        float distance = 100000;
+        Vector2 closestPoint = new Vector2(0,0);
+
+        foreach(Vector2 p in points)
         {
-            if(finalPoint.x >= 0) finalPoint.x = 0.5f;
-            else finalPoint.x = -0.5f;
-        } 
-        else
+            float d = Vector2.Distance(p, point);
+            if(d < distance)
+            {
+                closestPoint = p;
+                distance = d;
+            }
+        }
+
+        Vector2 relDist = transform.InverseTransformDirection(closestPoint - point);
+        Debug.Log("RelDist: " + relDist);
+
+        Vector2 returnPoint = this.transform.InverseTransformPoint(point);
+
+        if(Math.Abs(relDist.x) < Math.Abs(relDist.y))
         {
-            if(finalPoint.y >= 0) finalPoint.y = 0.5f;
-            else finalPoint.y = -0.5f;
-        } 
-        return finalPoint;
+            if(relDist.x < 0) 
+            {
+                returnPoint.x = -0.5f;
+            }
+            else returnPoint.x = 0.5f;
+        }
+        else{
+            if(relDist.y < 0) 
+            {
+                returnPoint.y = -0.5f;
+            }
+            else returnPoint.y = 0.5f;
+        }
+        //Debug.Log("ReturnPointBefore: " + returnPoint);
+        returnPoint = this.transform.TransformPoint(returnPoint);
+        //Debug.Log("ReturnPointAfter: " + returnPoint);
+        return returnPoint;
 
     }
 
