@@ -10,7 +10,7 @@ public class MyCollider : MonoBehaviour
     //OnCollisionEnter event handler
     //public delegate void CollisionHandler(MyCollider collider);
     //public event CollisionHandler OnCollisionEnterEvent;
-    public UnityEvent<MyCollider> OnCollisionEnterEvent;
+    public UnityEvent<(MyCollider, Vector2)> OnCollisionEnterEvent;
     protected virtual void Start()
     {
         myRigidbody = this.GetComponent<MyRigidbody>();

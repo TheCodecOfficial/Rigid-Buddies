@@ -35,42 +35,42 @@ public class UserInput : MonoBehaviour
         }*/
 
         // Right Flipper
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
             flipperRight.isPressed = true;
             rotateAroundAPointRight.isPressed = true;
             flipper3Right.isPressed = true;
             //print("right flipper pressed");
         }
-        if (Input.GetKeyUp(KeyCode.M))
+        if (Input.GetKeyUp(KeyCode.M) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
         {
             flipperRight.isPressed = false;
-            rotateAroundAPointRight.isPressed = false;  
+            rotateAroundAPointRight.isPressed = false;
             flipper3Right.isPressed = false;
             //print("right flipper released");
         }
 
-        
+
         // Left Flipper
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             flipperLeft.isPressed = true;
             rotateAroundAPointLeft.isPressed = true;
             flipper3Left.isPressed = true;
             //print("left flipper pressed");
         }
-        
-        if (Input.GetKeyUp(KeyCode.X))
+
+        if (Input.GetKeyUp(KeyCode.X) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
         {
             flipperLeft.isPressed = false;
             rotateAroundAPointLeft.isPressed = false;
             flipper3Left.isPressed = false;
             //print("left flipper released");
         }
-        
+
     }
 
 
 }
-    
+
 

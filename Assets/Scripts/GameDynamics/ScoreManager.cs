@@ -16,7 +16,7 @@ public class ScoreManager : MonoBehaviour
         
         if(myCollider.tag == "projectile"){
             totalPoints += pointsPerCollision;
-            scoreText.text = "Score: \n" + totalPoints.ToString();
+            scoreText.text = "Score: " + totalPoints.ToString();
         }
 
     }

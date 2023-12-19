@@ -11,7 +11,7 @@ public class Polygon : MonoBehaviour
     void AdjustPositions()
     {
         Vector2 centroid = PolygonUtil.GetBBCentroid(vertices);
-        Debug.Log("Centroid is " + centroid);
+        //Debug.Log("Centroid is " + centroid);
         //Vector2 centroid = PolygonUtil.GetCentroid(vertices);
         for (int i = 0; i < vertices.Length; i++)
         {
@@ -37,12 +37,7 @@ public class Polygon : MonoBehaviour
 
     public Vector2[] GetVerticesWorld()
     {
-        Vector2[] verticesWorld = new Vector2[vertices.Length];
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            verticesWorld[i] = vertices[i] + (Vector2)transform.position;
-        }
-        return verticesWorld;
+        return PolygonUtil.OffsetVertices(vertices, transform.position);
     }
 
     public void RebuildMesh()

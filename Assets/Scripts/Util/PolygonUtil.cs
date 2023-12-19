@@ -147,9 +147,22 @@ public class PolygonUtil
     // Sorts an array of vertices and merges neighboring vertices that are too close together into one
     public static Vector2[] Polygonize(Vector2[] vertices)
     {
+        //Debug.Log("Polygonizing " + vertices.Length + " vertices");
         vertices = SortVertices(vertices);
+        if (vertices == null) return new Vector2[0];
         vertices = MergeVertices(vertices);
         return vertices;
+    }
+
+    // Offsets each vertex by a given vector
+    public static Vector2[] OffsetVertices(Vector2[] vertices, Vector2 offset)
+    {
+        Vector2[] offsetVertices = new Vector2[vertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            offsetVertices[i] = vertices[i] + offset;
+        }
+        return offsetVertices;
     }
 
     // Cuts a polygon defined by vertices along a line segment (a, b)
@@ -233,6 +246,10 @@ public class PolygonUtil
     // Performs a random cut on a polygon defined by vertices
     public static Vector2[][] CutRandom(Vector2[] vertices)
     {
+        if (vertices.Length < 3)
+        {
+            return null;
+        }
         int randomIndex = Random.Range(0, vertices.Length);
         int randomIndex2 = (randomIndex + 2) % vertices.Length;
         Vector2 mid1 = (vertices[randomIndex] + vertices[(randomIndex + 1) % vertices.Length]) / 2;

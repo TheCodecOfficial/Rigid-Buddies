@@ -75,8 +75,8 @@ public class PhysicsManager : MonoBehaviour
     {
         if ((collider1 as dynamic).Collides(collider2 as dynamic))
         {
-            collider1.OnCollisionEnterEvent.Invoke(collider2);
-            collider2.OnCollisionEnterEvent.Invoke(collider1);
+            //collider1.OnCollisionEnterEvent.Invoke(collider2);
+            //collider2.OnCollisionEnterEvent.Invoke(collider1);
             //Static and kinematic colliders dont move anyways
             if((collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
                 return;
@@ -89,11 +89,14 @@ public class PhysicsManager : MonoBehaviour
                 collider1 = collider2;
                 collider2 = temp;
             }
+            (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+            collider1.OnCollisionEnterEvent.Invoke((collider2, penetration.Item1));
+            collider2.OnCollisionEnterEvent.Invoke((collider1, penetration.Item2));
 
             if(!(collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
             {
                 
-                (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                //(Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
                 //This is how much they overlap, going from col2 to col1
                 Vector2 normal = penetration.Item3.normalized;
 
@@ -138,7 +141,7 @@ public class PhysicsManager : MonoBehaviour
             else
             {
                 
-                (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                //(Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
                 //This is how much they overlap, going from col2 to col1
                 Vector2 normal = penetration.Item3.normalized;
 

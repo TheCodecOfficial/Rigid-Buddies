@@ -37,6 +37,15 @@ public class MyPolygonCollider : MyCollider
         return Vector2.Distance(closestPoint, other.center) < other.radius;
     }
 
+    public (Vector2, Vector2, Vector2, float) Penetrate(MyCircleCollider other)
+    {
+        Vector2 closestPoint = PolygonUtil.GetClosestPoint(GetVerticesArray(), other.center);
+        Vector2 normal = (other.center - closestPoint).normalized;
+        Vector2 otherPoint = other.center - normal * other.radius;
+        float depth = Vector2.Distance(closestPoint, otherPoint);
+        return (closestPoint, otherPoint, normal, depth);
+    }
+
     public bool Collides(MyPolygonCollider other)
     {
         (bool collides, Vector2 collisionPoint) sat = SAT.PolyPolyCollision(GetVerticesArray(), other.GetVerticesArray());

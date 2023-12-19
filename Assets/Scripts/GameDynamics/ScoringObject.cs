@@ -10,6 +10,7 @@ public class ScoringObject : MonoBehaviour
     int hitNumber = 0;
     SpriteRenderer spriteRenderer;
     Color intialColor;
+    float intensity = 0.2f;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,23 +19,34 @@ public class ScoringObject : MonoBehaviour
         myCollider.OnCollisionEnterEvent.AddListener(OnHit);
         intialColor = spriteRenderer.color;
 
+        transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(intialColor.r * intensity, intialColor.g * intensity, intialColor.b * intensity));
     }
-    void OnHit(MyCollider myCollider){
-        if(myCollider.tag == "projectile")
+    void OnHit((MyCollider col, Vector2 point) collisionInfo)
+    {
+        myCollider = collisionInfo.col;
+        if (myCollider.tag == "projectile")
         {
             hitNumber++;
-            scoreManager.AddPoints( myCollider);
+            intensity += 0.3f;
+            scoreManager.AddPoints(myCollider);
 
-            if(hitNumber >= maxHitNumber){
+            if (hitNumber >= maxHitNumber)
+            {
                 //gameObject.SetActive(false);
+                Debug.Log("Object hit at: " + collisionInfo.point);
                 Destroy(gameObject);
-            }else{
-                
-                float darkness = ((float)maxHitNumber - (float)hitNumber)/(float)maxHitNumber;
-                spriteRenderer.color = new Color(intialColor.r*darkness, intialColor.g*darkness, intialColor.b*darkness);
+                EffectsManager.instance.ShatterBox(transform.position, collisionInfo.point);
+            }
+            else
+            {
+                //float intensity = (maxHitNumber - hitNumber + 1) / (float)maxHitNumber;
+                //intensity = Mathf.Pow(intensity, 5f);
+                //intensity += 1f;
+                //intensity *= 2f;
+
+                // Set emission intensity
+                transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(intialColor.r * intensity, intialColor.g * intensity, intialColor.b * intensity));
             }
         }
     }
-    
-
 }
