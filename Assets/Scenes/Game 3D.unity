@@ -4119,7 +4119,7 @@ MonoBehaviour:
   - {fileID: 1078434440}
   - {fileID: 2078715529}
   isPressed: 0
-  maxRotation: 90
+  maxRotation: 160
 --- !u!114 &807169747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8816,7 +8816,7 @@ MonoBehaviour:
   - {fileID: 1410853470}
   - {fileID: 378860719}
   isPressed: 0
-  maxRotation: 90
+  maxRotation: 20
 --- !u!114 &1739110271
 MonoBehaviour:
   m_ObjectHideFlags: 0
