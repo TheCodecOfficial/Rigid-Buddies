@@ -44,5 +44,6 @@ The developed scripts can be split in:
 ## Usage
 
 Once the game is running, and you find yourself in the game window, you can use the keys X-M, A-D or left-right arrow keys to control the flippers.
-The objective is to eliminate the bricks using the provided balls.Each brick requires three hits be destroyed, at which point it will visually shatter, and a new ball will be generated.
+The objective is to eliminate the bricks using the provided balls.Each brick requires three hits to be destroyed, at which point it will visually shatter, and a new ball will be generated.
+When space key is pressed all proyectiles suffer an upward force. And finally, the game can be restarted by pressing the R key.
 
