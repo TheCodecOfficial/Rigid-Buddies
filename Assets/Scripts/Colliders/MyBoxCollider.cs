@@ -17,81 +17,10 @@ public class MyBoxCollider : MyCollider
         base.Start();
         
         this.size = new Vector2(transform.localScale.x, transform.localScale.y);
+
+        //Formula taken from Wikipedia
         myRigidbody.momentOfInertia = myRigidbody.GetMass() * 0.08333f * (size.x * size.x + size.y * size.y);
 
-    }
-
-    public bool Collides(MyCollider other)
-    {
-        return false;
-
-        //EVERYTHING BELOW IS NOT WORKING CURRENTLY
-
-        Vector2 normal, point;
-        List<Vector2> otherVertices = other.GetVertices();
-        //For each normal of the box try seperating axes theorem:
-
-        //NORMAL 1:
-        normal = transform.up;
-        point = transform.position + size.y * transform.up / 2;
-
-        bool seperated = true;
-
-        foreach(Vector2 vertex in other.GetVertices())
-        {
-            if(Vector2.Dot(vertex - point, normal) < 0){
-                seperated = false;
-                break;
-            }
-        }
-        if(seperated) return true;
-
-        //NORMAL 2:
-        normal = -transform.up;
-        point = transform.position - size.y * transform.up / 2;
-
-        seperated = true;
-
-        foreach(Vector2 vertex in other.GetVertices())
-        {
-            if(Vector2.Dot(vertex - point, normal) < 0){
-                seperated = false;
-                break;
-            }
-        }
-        if(seperated) return true;
-
-        //NORMAL 3:
-        normal = transform.right;
-        point = transform.position + size.x * transform.right / 2;
-
-        seperated = true;
-
-        foreach(Vector2 vertex in other.GetVertices())
-        {
-            if(Vector2.Dot(vertex - point, normal) < 0){
-                seperated = false;
-                break;
-            }
-        }
-        if(seperated) return true;
-
-        //NORMAL 4:
-        normal = -transform.right;
-        point = transform.position - size.x * transform.right / 2;
-
-        seperated = true;
-
-        foreach(Vector2 vertex in other.GetVertices())
-        {
-            if(Vector2.Dot(vertex - point, normal) < 0){
-                seperated = false;
-                break;
-            }
-        }
-        if(seperated) return true;
-
-        return false;
     }
 
     public bool Collides(MyCircleCollider other)
@@ -100,7 +29,8 @@ public class MyBoxCollider : MyCollider
         return other.Collides(this);
     }
 
-    //Checks for collision with other and caches the colliding point in world coordinates for penetration
+    //Checks for collision with other and caches the colliding point in world coordinates for penetration.
+    //(In the variable cachedPos)
     public bool Collides(MyBoxCollider other)
     {
         
@@ -110,7 +40,6 @@ public class MyBoxCollider : MyCollider
             Vector2 pos = other.transform.InverseTransformPoint(point);
             if(Math.Abs(pos.x) <= 0.5 && Math.Abs(pos.y) <= 0.5) 
             {
-                //That this calculation is cached for Penetrate()
                 cachedPos = point;
                 cachedThis = true;
                 return true;
@@ -137,7 +66,7 @@ public class MyBoxCollider : MyCollider
         Vector2 thisPoint; Vector2 otherPoint; Vector2 normal;
         float distance;
     
-        
+        //Get collision point that was cached in the collision check
         if(cachedThis)
         {
             thisPoint = cachedPos;
@@ -161,12 +90,11 @@ public class MyBoxCollider : MyCollider
 
     public (Vector2, Vector2, Vector2, float) Penetrate(MyCircleCollider collider)
     {
-        //Let Circles handle the collision between these two
+        //Let Circles handle the collision between these two, but swap return values
         var penetration = collider.Penetrate(this);
         return (penetration.Item2, penetration.Item1, -penetration.Item3, penetration.Item4);
     }
 
-    
     public override List<Vector2> GetVertices()
     {
         List<Vector2> vertices = new();
@@ -179,6 +107,7 @@ public class MyBoxCollider : MyCollider
         return vertices;
     }
 
+    //Visualization of getVe3rtices for debugging
     void OnDrawGizmos()
     {
         var vertices = GetVertices();
@@ -227,7 +156,6 @@ public class MyBoxCollider : MyCollider
         }
 
         Vector2 relDist = transform.InverseTransformDirection(closestPoint - point);
-        Debug.Log("RelDist: " + relDist);
 
         Vector2 returnPoint = this.transform.InverseTransformPoint(point);
 
@@ -246,23 +174,9 @@ public class MyBoxCollider : MyCollider
             }
             else returnPoint.y = 0.5f;
         }
-        //Debug.Log("ReturnPointBefore: " + returnPoint);
         returnPoint = this.transform.TransformPoint(returnPoint);
-        //Debug.Log("ReturnPointAfter: " + returnPoint);
         return returnPoint;
 
-    }
-
-    // This is taken from the tutorial
-    // https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/04-pinball.html
-    Vector2 ClosestPointOnSegment(Vector2 p, Vector2 a, Vector2 b)
-    {
-        Vector2 ab = b - a;
-        float t = ab.sqrMagnitude;
-        if (t == 0)
-            return a;
-        t = Mathf.Max(0, Mathf.Min(1, (Vector2.Dot(p, ab) - Vector2.Dot(a, ab)) / t));
-        return a + ab * t;
     }
 
     public float Cross2D(Vector2 a, Vector2 b)

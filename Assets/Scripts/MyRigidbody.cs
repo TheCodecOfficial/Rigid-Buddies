@@ -22,7 +22,6 @@ public class MyRigidbody : MonoBehaviour
     public void SetAngularVelocity(float angVel) { angularVelocity = angVel; }
 
     [SerializeField]
-    //Center of mass position
     public float momentOfInertia;
     public float GetMomentOfInertia() { return momentOfInertia; }
     public void SetMomentOfInertia(float inertia) { momentOfInertia = inertia; }
@@ -37,8 +36,10 @@ public class MyRigidbody : MonoBehaviour
     //if true, always this bounciness will be taken instead of Min
     public bool overrideBounciness;
 
+    //Aka restitution
     public float bounciness;
 
+    //in percent per seconds (eg. 0.5 -> velocity halves every second)
     public float dragAmount;
     public float angularDragAmount;
 
@@ -61,38 +62,39 @@ public class MyRigidbody : MonoBehaviour
         if (isStatic)
             return;
 
+        //Apply gravity
         if(useGravity)
             AddForce((Vector2)Physics.gravity*mass, Vector2.zero);
 
         ApplyDrag();
-        ImplicitEuler();
+        SymplecticEuler();
 
     }
 
+    
     protected void ApplyDrag()
     {
         velocity = velocity - dragAmount * velocity * Time.deltaTime;
-        //AddForce(-velocity * dragAmount, Vector2.zero);
         angularVelocity = angularVelocity - angularDragAmount * angularVelocity * Time.deltaTime;
     }
 
 
-    //Adds velocity and torque of a force applied at position, both in local coordinates!
-    //(Actually, "force" is rather an impulse)
+    //Adds velocity (without torque) of a force applied at position, both in local coordinates!
     public void AddForce(Vector2 force, Vector2 position)
     {
-        velocity += force/mass * Time.deltaTime;
+        velocity += force / mass * Time.deltaTime;
         //angularVelocity += ((position.x * force.y - position.y * force.x)) * Time.deltaTime;
     }
 
-    //Inputs in world frame!
+    //Inputs in world frame
+    //Applies an instantanious change of velocity at the attackPos point
     public void AddImpulse(Vector2 impulse, Vector2 attackPos)
     {
-        //Debug.Log("Adding impulse to " + this + ", impulse=" + impulse + ", attackPos=" + attackPos);
-        Vector2 radius = new Vector3(attackPos.x, attackPos.y, 0) - this.transform.position;
-        //Debug.Log("Radius: " + radius);
+        //Velocity part
         velocity += impulse / mass;
-        //Debug.Log("AngVelChange: " + Cross2D(radius, impulse) / momentOfInertia);
+
+        //Rotation part
+        Vector2 radius = new Vector3(attackPos.x, attackPos.y, 0) - this.transform.position;
         angularVelocity += Cross2D(radius, impulse) / momentOfInertia;
     }
 
@@ -102,21 +104,22 @@ public class MyRigidbody : MonoBehaviour
         angularVelocity = 0;
     }
 
-    //Symplectic euler
-    public void ImplicitEuler()
+    //Symplectic euler (Actually only updates position, because all velocity changes are applied in other methods)
+    public void SymplecticEuler()
     {
         if(!hasFixedPosition)
             transform.position += new Vector3(velocity.x, velocity.y) * Time.deltaTime;
         transform.Rotate(new Vector3(0, 0, angularVelocity * (180 / (float)Math.PI) * Time.deltaTime ));
     }
 
-    //Returns the velocity of a point on this rigidbody
+    //Returns the velocity of a point on this rigidbody (input and output are in world coordinates)
     public Vector2 PointVelocity(Vector2 point)
     {
         Vector2 radius = point - new Vector2(transform.position.x, transform.position.y);
         return velocity + new Vector2(-angularVelocity * radius.y, angularVelocity * radius.x);
     }
 
+    //2D cross product
     public float Cross2D(Vector2 a, Vector2 b)
     {
         return (a.x * b.y) - (a.y * b.x);
