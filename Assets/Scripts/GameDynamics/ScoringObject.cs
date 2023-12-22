@@ -2,25 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Scoring object class handles the behaviour of scoring objects in the game.
 public class ScoringObject : MonoBehaviour
 {
-    MyCollider myCollider;
+    
     public ScoreManager scoreManager;
-    public int maxHitNumber = 3;
-    int hitNumber = 0;
-    SpriteRenderer spriteRenderer;
+    public int maxHitNumber = 3; // Max number of hits before the object is destroyed.
+    int hitNumber = 0; // The current number of hits
+    SpriteRenderer spriteRenderer; // The sprite renderer of the object.
     Color intialColor;
-    float intensity = 0.2f;
-    // Start is called before the first frame update
+    MyCollider myCollider;
+    float intensity = 0.2f; // The intensity of the emission color.
+
     void Start()
     {
+        // Get the components.
         myCollider = GetComponent<MyCollider>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         myCollider.OnCollisionEnterEvent.AddListener(OnHit);
         intialColor = spriteRenderer.color;
-
-        transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(intialColor.r * intensity, intialColor.g * intensity, intialColor.b * intensity));
+        
+        // Set the emission color.
+        transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.
+            SetColor("_EmissionColor", new Color(intialColor.r * intensity,
+            intialColor.g * intensity, intialColor.b * intensity));
     }
+
+    // Called when the object is hit.
     void OnHit((MyCollider col, Vector2 point) collisionInfo)
     {
         myCollider = collisionInfo.col;
@@ -32,20 +40,16 @@ public class ScoringObject : MonoBehaviour
 
             if (hitNumber >= maxHitNumber)
             {
-                //gameObject.SetActive(false);
+                // Shatter and destroy the object.
                 Debug.Log("Object hit at: " + collisionInfo.point);
                 Destroy(gameObject);
                 EffectsManager.instance.ShatterBox(transform.position, collisionInfo.point);
             }
             else
             {
-                //float intensity = (maxHitNumber - hitNumber + 1) / (float)maxHitNumber;
-                //intensity = Mathf.Pow(intensity, 5f);
-                //intensity += 1f;
-                //intensity *= 2f;
-
-                // Set emission intensity
-                transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(intialColor.r * intensity, intialColor.g * intensity, intialColor.b * intensity));
+                transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.
+                    SetColor("_EmissionColor", new Color(intialColor.r * intensity,
+                    intialColor.g * intensity, intialColor.b * intensity));
             }
         }
     }

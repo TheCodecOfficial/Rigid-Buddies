@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+// RigidBodyText class handles the visualization of the rigidbody velocity and angular velocity.
 public class RigidBodyText : MonoBehaviour
 {
     public MyRigidbody rb;
     public TextMeshPro text;
-    // Start is called before the first frame update
+    
     void Start()
     {
         StartCoroutine(SetVisualizationText());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // Update the position of the text to the rigidbody position and set the
+    // text to the rigidbody linear velocity and angular velocity.
     private IEnumerator SetVisualizationText(){
         while(true)
         {
@@ -29,5 +26,4 @@ public class RigidBodyText : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
     }
-    
 }
