@@ -2,14 +2,6 @@
 
 A fun little physics-based video game, made as a project for the course Physically Based Simulation for Computer Graphics 2023.
 
-
-## Features
-
-- Triple A graphics
-- Cutting edge physics simulations
-- Extreme performance
-- Exiting and action-packed gameplay
-
 ## Info
 
 Unity version `LTS 2022.3.14f1`
@@ -38,7 +30,7 @@ The developed scripts can be split in:
 ## Installation
 The whole project can be inspected and run inside the Unity game engine:
 
-1. Clone this repository.
+1. Clone this repository (main branch).
 2. Open the project in Unity version `LTS 2022.3.14f1`.
 3. Open the `Game3D` scene.
 4. Click the `Play` button.
