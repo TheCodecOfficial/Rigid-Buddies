@@ -6,6 +6,10 @@ A fun little physics-based video game, made as a project for the course Physical
 
 Unity version `LTS 2022.3.14f1`
 
+## Presentation and Demo video
+
+In this repository a demo video and the presentation slides of the final presentation for the course PBS 2023 are included. They can be found in the folder named "Demo video and presentation slides".
+
 ## Physics
 
 The physical basis has been custom created.
@@ -22,7 +26,7 @@ The developed scripts can be split in:
 
 - `Boxed and balls colliders`: In this scene, various types of colliders (boxes and circles) are presented. The velocities and angular velocities of each collider can be observed in the inspector through the myRigidBody component. Additionally, velocity and angular velocity parameters are displayed on top of one box and one sphere, providing a visual representation of how these properties evolve..
 
-- `Polygon Collision`: This scene shows collision involving several polygons.
+- `Polygon Collision`: This scene shows collision involving several polygons (not fully working).
 
 - `Shatter Effect`: This scene showcases the visual shattering effect employed in the Game3D scene
 - `Rendering`: This scene was exclusively used to work on the visual rendering
