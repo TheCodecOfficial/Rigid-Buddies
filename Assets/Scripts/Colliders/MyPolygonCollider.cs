@@ -64,6 +64,7 @@ public class MyPolygonCollider : MyCollider
         //Vector2 closestSelf = PolygonUtil.GetClosestPoint(GetVerticesArray(), sat.collisionPoint);
         //Vector2 closestOther = PolygonUtil.GetClosestPoint(other.GetVerticesArray(), sat.collisionPoint);
 
+        // Get the closest point to the collision point on each of the two polygons
         Vector2 closestSelf = PolygonUtil.GetClosestPoint(GetVerticesArray(), PolygonUtil.GetCentroid(other.GetVerticesArray()));
         Vector2 closestOther = PolygonUtil.GetClosestPoint(other.GetVerticesArray(), PolygonUtil.GetCentroid(GetVerticesArray()));
 

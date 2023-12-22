@@ -8,6 +8,7 @@ public class Polygon : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
 
+    // Adjusts the positions of the vertices and the transform so that the centroid is at the origin
     void AdjustPositions()
     {
         Vector2 centroid = PolygonUtil.GetBBCentroid(vertices);

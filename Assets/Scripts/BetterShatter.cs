@@ -6,6 +6,7 @@ public class BetterShatter : MonoBehaviour
 {
     public static GameObject[] Shatter(Vector2[] vertices, Vector2 point)
     {
+        // Get the closest point to the shatter point
         Vector2 closestA = PolygonUtil.GetClosestPoint(vertices, point);
         int index = PolygonUtil.GetClosestSegmentIndex(vertices, point);
         int[] segmentIndices = new int[vertices.Length - 1];
@@ -21,6 +22,7 @@ public class BetterShatter : MonoBehaviour
             return (a - index + vertices.Length) % vertices.Length - (b - index + vertices.Length) % vertices.Length;
         });
         Vector2[] poly = vertices;
+        // Iteratively generate new polygons by cutting the old ones
         List<Vector2[]> polysL = new();
         for (int i = 0; i < chosen.Length; i++)
         {
@@ -28,6 +30,7 @@ public class BetterShatter : MonoBehaviour
             Vector2 b = vertices[(chosen[i] + 1) % vertices.Length];
             Vector2 m = (a + b) / 2;
             Vector2[][] cut = PolygonUtil.Cut(poly, closestA, m);
+            // Cur the fragments again for more randomness
             Vector2[][] cut2 = PolygonUtil.CutRandom(cut[0]);
             //polys[i] = cut[0];
             polysL.Add(cut2[0]);
@@ -37,6 +40,8 @@ public class BetterShatter : MonoBehaviour
         }
         polysL.Add(poly);
         //polys[chosen.Length] = poly;
+
+        // Instantiate each shard as an actual polygon
         GameObject[] shards = new GameObject[polysL.Count];
         int j = 0;
         foreach (Vector2[] polyg in polysL)
