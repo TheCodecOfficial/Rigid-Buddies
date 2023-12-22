@@ -1,75 +1,61 @@
+
 using UnityEngine;
+using System.Collections.Generic;
+using System;
+using Unity.Mathematics;
 
 public class PhysicsManager : MonoBehaviour
 {
     public Ball[] balls;
     public Border border;
     public Flipper[] flippers;
-    public Obstacle[] obstacles;
+
+    public MyRigidbody[] rigidbodies;
+
+    public static PhysicsManager instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
         // Quick way to get all ball and border components
         // Doesn't allow balls/borders to be added at runtime
-        balls = FindObjectsOfType<Ball>();
-        border = FindObjectOfType<Border>();
-        flippers = FindObjectsOfType<Flipper>();
-        obstacles = FindObjectsOfType<Obstacle>();
+
+        RefreshRigidbodies();
+
+        //balls = FindObjectsOfType<Ball>();
+        //border = FindObjectOfType<Border>();
+        //flippers = FindObjectsOfType<Flipper>();
+
     }
 
-    void Update()
+    public void RefreshRigidbodies()
     {
-        //todo añadir colisiones con flippers
-        //todo I guess input manager
-        for (int i = 0; i < flippers.Length; i++)
-        {   
-            flippers[i].Simulate();
-        }
-        for (int i = 0; i < balls.Length; i++)
+        rigidbodies = FindObjectsOfType<MyRigidbody>();
+    }
+
+    void FixedUpdate()
+    {
+        for (int i = 0; i < rigidbodies.Length; i++)
         {
-            balls[i].Simulate();
-            for (int j = i + 1; j < balls.Length; j++)
+            rigidbodies[i].Simulate();
+            MyCollider collider = rigidbodies[i].GetCollider();
+            if (collider == null) continue;
+            for (int j = i + 1; j < rigidbodies.Length; j++)
             {
-                HandleBallBallCollision(balls[i], balls[j]);
+                MyCollider otherCollider = rigidbodies[j].GetCollider();
+                if (otherCollider != null)
+                {
+                    //TODO: Broad Phase: Instead of having just a list, make spatial aware data structure
+                    HandleCollision(collider, otherCollider);
+                }
             }
-            for (var j = 0; j < flippers.Length; j++)
-            {
-				handleBallFlipperCollision(balls[i], flippers[j]);
-            }
-            for (var j = 0; j < obstacles.Length; j++)
-				handleBallObstacleCollision(balls[i], obstacles[j]);
-                
-            HandleBallBorderCollision(balls[i], border);
         }
-    }
 
-    // This is taken from the tutorial
-    // https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/04-pinball.html
-    void HandleBallBallCollision(Ball ball1, Ball ball2)
-    {
-        float restitution = Mathf.Min(ball1.restitution, ball2.restitution);
-        Vector2 dir = ball2.pos - ball1.pos;
-        float d = dir.magnitude;
-        if (d == 0.0 || d > ball1.radius + ball2.radius)
-            return;
-
-        dir /= d;
-
-        float corr = (ball1.radius + ball2.radius - d) / 2f;
-        ball1.pos += dir * -corr;
-        ball2.pos += dir * corr;
-
-        float v1 = Vector2.Dot(ball1.vel, dir);
-        float v2 = Vector2.Dot(ball2.vel, dir);
-
-        float m1 = ball1.mass;
-        float m2 = ball2.mass;
-
-        var newV1 = (m1 * v1 + m2 * v2 - m2 * (v1 - v2) * restitution) / (m1 + m2);
-        var newV2 = (m1 * v1 + m2 * v2 - m1 * (v2 - v1) * restitution) / (m1 + m2);
-
-        ball1.vel += dir * (newV1 - v1);
-        ball2.vel += dir * (newV2 - v2);
+        return;
     }
 
     // This is taken from the tutorial
@@ -84,104 +70,137 @@ public class PhysicsManager : MonoBehaviour
         return a + ab * t;
     }
 
-    // This is taken from the tutorial
-    // https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/04-pinball.html
-    void HandleBallBorderCollision(Ball ball, Border border)
+
+    void HandleCollision(MyCollider collider1, MyCollider collider2)
     {
-        Vector2[] points = border.points;
-        if (points.Length < 3)
-            return;
-
-        // find closest segment;
-        Vector2 d;
-        Vector2 closest = new(0, 0);
-        Vector2 ab;
-        Vector2 normal = new(0, 0);
-
-        float dist, minDist = 0;
-
-        for (var i = 0; i < points.Length; i++)
+        if ((collider1 as dynamic).Collides(collider2 as dynamic))
         {
-            Vector2 a = points[i];
-            Vector2 b = points[(i + 1) % points.Length];
-            Vector2 c = ClosestPointOnSegment(ball.pos, a, b);
-            d = ball.pos - c;
-            dist = d.magnitude;
-            if (i == 0 || dist < minDist)
+            //collider1.OnCollisionEnterEvent.Invoke(collider2);
+            //collider2.OnCollisionEnterEvent.Invoke(collider1);
+            //Static and kinematic colliders dont move anyways
+            if((collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
+                return;
+
+            //One is nonStatic or non kinematic
+            if((collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && !(collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
             {
-                minDist = dist;
-                closest = c;
-                ab = b - a;
-                normal = Vector2.Perpendicular(ab);
+                //Swap col1 and col2 to not duplicate code
+                MyCollider temp = collider1;
+                collider1 = collider2;
+                collider2 = temp;
+            }
+            (Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+            collider1.OnCollisionEnterEvent.Invoke((collider2, penetration.Item1));
+            collider2.OnCollisionEnterEvent.Invoke((collider1, penetration.Item2));
+
+            if(!(collider1.GetRigidbody().isStatic||collider1.GetRigidbody().isKinematic) && (collider2.GetRigidbody().isStatic||collider2.GetRigidbody().isKinematic))
+            {
+                
+                //(Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                //This is how much they overlap, going from col2 to col1
+                Vector2 normal = penetration.Item3.normalized;
+
+                if (false)
+                {
+                    Debug.Log(penetration.Item1 + ", " + penetration.Item2 + ", " + penetration.Item3 + ", " + penetration.Item4);
+                }
+                Vector2 displacement = normal * penetration.Item4;
+                collider1.transform.position += new Vector3(displacement.x, displacement.y, 0);
+
+                Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
+                Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
+
+                Vector2 relVel = vel1 - vel2;
+
+                float normalVel = Vector2.Dot(relVel, normal);
+
+                //Debug.Log("Normalvel: " + normalVel);
+
+                float bounciness;
+                if (collider1.myRigidbody.overrideBounciness)
+                    bounciness = collider1.myRigidbody.bounciness;
+                if (collider2.myRigidbody.overrideBounciness)
+                    bounciness = collider2.myRigidbody.bounciness;
+                else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
+
+
+                float jTop = -(1 + bounciness) * normalVel;
+
+                Vector3 rap = new Vector3(penetration.Item1.x, penetration.Item1.y, 0) - collider1.transform.position;
+                float rCrossNSquared = Vector3.Cross(rap, new Vector3(normal.x, normal.y, 0)).z;
+                rCrossNSquared = rCrossNSquared * rCrossNSquared;
+
+                float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (rCrossNSquared / collider1.myRigidbody.momentOfInertia));
+
+                //Debug.Log("J: " + j + ", Normal: " + normal + ", Point: " + penetration.Item1 + normal * penetration.Item4);
+                collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
+                collider1.myRigidbody.SymplecticEuler();
+                
+            }
+
+            else
+            {
+                
+                //(Vector2, Vector2, Vector2, float) penetration = (collider1 as dynamic).Penetrate(collider2 as dynamic);
+                //This is how much they overlap, going from col2 to col1
+                Vector2 normal = penetration.Item3.normalized;
+
+                //Displace rigidbodies according to weight (lighter get more displacement)
+                float m1 = collider1.myRigidbody.GetMass(); float m2 = collider2.myRigidbody.GetMass();
+                float massCoefficient1 = m1 / (m1 + m2);
+                float massCoefficient2 = 1 - massCoefficient1;
+
+                Vector2 displacement1 = massCoefficient2 * normal * penetration.Item4;
+                Vector2 displacement2 = massCoefficient1 * normal * penetration.Item4;
+
+                collider1.transform.position += new Vector3(displacement1.x, displacement1.y, 0);
+                collider2.transform.position -= new Vector3(displacement2.x, displacement2.y, 0);
+
+                Vector2 vel1 = collider1.myRigidbody.PointVelocity(penetration.Item1);
+                Vector2 vel2 = collider2.myRigidbody.PointVelocity(penetration.Item2);
+
+                Vector2 relVel = vel1 - vel2;
+
+                float normalVel = Vector2.Dot(relVel, normal);
+
+                float bounciness;
+                if (collider1.myRigidbody.overrideBounciness)
+                    bounciness = collider1.myRigidbody.bounciness;
+                if (collider2.myRigidbody.overrideBounciness)
+                    bounciness = collider2.myRigidbody.bounciness;
+                else bounciness = Math.Min(collider1.myRigidbody.bounciness, collider2.myRigidbody.bounciness);
+
+                float jTop = -(1 + bounciness) * normalVel;
+
+                Vector3 rap = new Vector3(penetration.Item1.x, penetration.Item1.y, 0) - collider1.transform.position;
+                Vector3 rbp = new Vector3(penetration.Item2.x, penetration.Item2.y, 0) - collider2.transform.position;
+                float raCrossNSquared = Vector3.Cross(rap, new Vector3(normal.x, normal.y, 0)).z;
+                raCrossNSquared = raCrossNSquared * raCrossNSquared;
+                float rbCrossNSquared = Vector3.Cross(rbp, new Vector3(normal.x, normal.y, 0)).z;
+                rbCrossNSquared = rbCrossNSquared * rbCrossNSquared;
+
+                float j = jTop / ((1 / collider1.myRigidbody.GetMass()) + (1 / collider2.myRigidbody.GetMass())
+                + (raCrossNSquared / collider1.myRigidbody.momentOfInertia) + (rbCrossNSquared / collider2.myRigidbody.momentOfInertia));
+
+                collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
+                collider2.myRigidbody.AddImpulse(-j * normal, penetration.Item2);
+                collider1.myRigidbody.SymplecticEuler();
+                collider2.myRigidbody.SymplecticEuler();
             }
         }
 
-        // push out
-        d = ball.pos - closest;
-        dist = d.magnitude;
-        if (dist == 0.0)
-        {
-            d = normal;
-            dist = normal.magnitude;
-        }
-        d /= dist;
-
-        if (Vector2.Dot(d, normal) >= 0.0)
-        {
-            if (dist > ball.radius)
-                return;
-            ball.pos += d * (ball.radius - dist);
-        }
-        else
-            ball.pos += d * -(dist + ball.radius);
-
-        // update velocity
-        float v = Vector2.Dot(ball.vel, d);
-        var vnew = Mathf.Abs(v) * ball.restitution;
-
-        ball.vel += d * (vnew - v);
     }
-    void handleBallFlipperCollision(Ball ball, Flipper flipper) 
-	{
-		Vector2 closest = ClosestPointOnSegment(ball.pos, flipper.pos, flipper.getTip());
-		Vector2 dir = ball.pos - closest;
-		float d = dir.magnitude;
-		if (d == 0.0 || d > ball.radius + flipper.radius)
-			return;
 
-		dir = dir*(1 / d);
 
-		float corr = ball.radius + flipper.radius - d;
-		ball.pos += dir* corr;
+    //Project vector a onto b
+    public Vector2 ProjectVector(Vector2 a, Vector2 b)
+    {
+        b.Normalize();
+        return Vector2.Dot(a, b) * b;
+    }
 
-		// update velocitiy
-
-		Vector2 radius = closest + dir* flipper.radius - flipper.pos;
-
-		Vector2 surfaceVel = Vector2.Perpendicular(radius);
-		surfaceVel *= flipper.currentAngularVelocity;
-		float v = Vector2.Dot(ball.vel , dir);
-		float vnew = Vector2.Dot(surfaceVel,dir)* ball.restitution* flipper.pushVel;
-
-		ball.vel = ball.vel + dir*( vnew - v);
-	}
-
-    void handleBallObstacleCollision(Ball ball, Obstacle obstacle) 
-	{
-		Vector2 dir = ball.pos - obstacle.pos;
-		float d = dir.magnitude;
-		if (d == 0.0 || d > ball.radius + obstacle.radius)
-			return;
-
-		dir = dir *1f / d;
-
-		float corr = ball.radius + obstacle.radius - d;
-		ball.pos += dir* corr;
-
-		var v = Vector2.Dot(ball.vel , dir);
-		ball.vel += dir * (obstacle.pushVel - v);
-
-        //TODO add score
-	}
-
+    public float Cross2D(Vector2 a, Vector2 b)
+    {
+        return (a.x * b.y) - (a.y * b.x);
+    }
 }
