@@ -2753,7 +2753,7 @@ GameObject:
   - component: {fileID: 807169749}
   - component: {fileID: 807169748}
   - component: {fileID: 807169747}
-  - component: {fileID: 807169746}
+  - component: {fileID: 807169751}
   m_Layer: 0
   m_Name: Right Flipper Center
   m_TagString: Flipper
@@ -2780,25 +2780,6 @@ Transform:
   - {fileID: 790654685}
   m_Father: {fileID: 392260991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 206}
---- !u!114 &807169746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807169744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c240a5a3b59095342b63f7934efa5dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 7
-  centerRigidbody: {fileID: 807169749}
-  additionalFlipperComponents:
-  - {fileID: 1078434440}
-  - {fileID: 2078715529}
-  isPressed: 0
-  maxRotation: 160
 --- !u!114 &807169747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2906,6 +2887,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &807169751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807169744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e32e4b906b4dc72488238af119b91de1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 7
+  centerRigidbody: {fileID: 807169749}
+  additionalFlipperComponents:
+  - {fileID: 1078434440}
+  - {fileID: 2078715529}
+  isPressed: 0
+  maxRotation: 160
 --- !u!1001 &811430508
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3009,7 +3009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 796787721607cfe4e960071638859e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flipperRight: {fileID: 807169746}
+  flipperRight: {fileID: 807169751}
   flipperLeft: {fileID: 1739110270}
 --- !u!4 &815233805
 Transform:
@@ -7027,7 +7027,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1739110268}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c240a5a3b59095342b63f7934efa5dd7, type: 3}
+  m_Script: {fileID: 11500000, guid: e32e4b906b4dc72488238af119b91de1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: -7

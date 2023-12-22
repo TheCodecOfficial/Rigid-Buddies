@@ -38,7 +38,6 @@ public class Flipper : MonoBehaviour
                     firstUpdateAfterClick = false;
                     firstUpdateAfterRelease = true;
                     //Set angular velocity
-                    Debug.Log("rotation speed: " + -rotationSpeed);
                     centerRigidbody.SetAngularVelocity(-rotationSpeed);
                 }
             }else{

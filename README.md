@@ -33,6 +33,7 @@ The developed scripts can be split in:
 - `Polygon Collision`: This scene shows collision involving several polygons.
 
 - `Shatter Effect`: This scene showcases the visual shattering effect employed in the Game3D scene
+- `Rendering`: This scene was exclusively used to work on the visual rendering
 
 ## Installation
 The whole project can be inspected and run inside the Unity game engine:
