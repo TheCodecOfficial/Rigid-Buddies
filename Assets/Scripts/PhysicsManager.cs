@@ -134,7 +134,7 @@ public class PhysicsManager : MonoBehaviour
 
                 //Debug.Log("J: " + j + ", Normal: " + normal + ", Point: " + penetration.Item1 + normal * penetration.Item4);
                 collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
-                collider1.myRigidbody.ImplicitEuler();
+                collider1.myRigidbody.SymplecticEuler();
                 
             }
 
@@ -184,8 +184,8 @@ public class PhysicsManager : MonoBehaviour
 
                 collider1.myRigidbody.AddImpulse(j * normal, penetration.Item1);
                 collider2.myRigidbody.AddImpulse(-j * normal, penetration.Item2);
-                collider1.myRigidbody.ImplicitEuler();
-                collider2.myRigidbody.ImplicitEuler();
+                collider1.myRigidbody.SymplecticEuler();
+                collider2.myRigidbody.SymplecticEuler();
             }
         }
 
